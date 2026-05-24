@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Divine Reveal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="Olivia/image.png">
+    <style>
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        html, body {
+            width:100%; height:100%;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+        }
+
+        /* ── blurred lily background ── */
+        body::before {
+            content:"";
+            position:fixed; inset:0;
+            background: url('assets/lilies.jpg') no-repeat center center;
+            background-size: cover;
+            filter: blur(6px) brightness(0.5);
+            transform: scale(1.08);
+            z-index:-1;
+        }
+
+        /* ── back arrow ── */
+        .nav-back {
+            position:fixed; top:clamp(14px,2vh,24px); left:clamp(14px,2vw,28px);
+            z-index:300;
+            background:rgba(255,255,255,0.18);
+            backdrop-filter:blur(12px);
+            border:1.5px solid rgba(255,255,255,0.3);
+            color:#f5dce8;
+            font-size:1.4rem;
+            width:46px; height:46px;
+            border-radius:50%;
+            cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 4px 16px rgba(0,0,0,0.2);
+            transition:background .25s, transform .2s;
+            text-decoration:none;
+        }
+        .nav-back:hover { background:rgba(255,255,255,0.32); transform:scale(1.08); }
+
+        /* ── full viewport stage ── */
+        .stage {
+            width:100vw; height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap: clamp(24px, 3.5vw, 56px);
+            padding: clamp(60px,8vh,100px) clamp(20px,4vw,60px) clamp(20px,4vh,40px);
+        }
+
+        /* ── subtitle ── */
+        .subtitle {
+            position:fixed;
+            top: clamp(14px,2.5vh,28px);
+            left:50%; transform:translateX(-50%);
+            color:#f5dce8;
+            font-size: clamp(1rem,1.8vw,1.5rem);
+            font-style:italic;
+            letter-spacing:3px;
+            text-shadow:0 2px 16px rgba(0,0,0,0.6);
+            white-space:nowrap;
+            z-index:10;
+            animation: softPulse 3s infinite ease-in-out;
+        }
+        @keyframes softPulse {
+            0%,100%{opacity:.75;transform:translateX(-50%) scale(1)}
+            50%{opacity:1;transform:translateX(-50%) scale(1.02)}
+        }
+
+        /* ── image card ── */
+        .image-container {
+            flex-shrink:0;
+            width:  clamp(200px, 22vw, 360px);
+            height: clamp(460px, 60vh, 620px);
+            border-radius: clamp(16px,1.8vw,30px);
+            border: clamp(4px,0.5vw,8px) solid rgba(255,255,255,0.85);
+            overflow:hidden;
+            box-shadow:0 24px 60px rgba(0,0,0,0.45);
+            position:relative;
+            opacity:0;
+            transform:translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .image-container.show { opacity:1; transform:translateY(0); }
+
+        .image-container img {
+            width:100%; height:100%;
+            object-fit:cover;
+        }
+
+        /* bouquet button over photo */
+        .bouquet-btn {
+            position:absolute;
+            bottom: clamp(36px,5vh,56px);
+            left:50%; transform:translateX(-50%);
+            z-index:20;
+            padding: clamp(8px,1vh,12px) clamp(18px,2vw,28px);
+            background:linear-gradient(135deg,#d4849a,#b86070);
+            color:#fff;
+            border:none;
+            border-radius:50px;
+            font-family:'Playfair Display',serif;
+            font-size:clamp(0.7rem,1vw,0.9rem);
+            letter-spacing:1.5px;
+            cursor:pointer;
+            box-shadow:0 6px 20px rgba(180,80,100,0.45);
+            opacity:0;
+            transition: opacity .6s ease 1.6s, transform .2s;
+            white-space:nowrap;
+        }
+        .bouquet-btn:hover { transform:translateX(-50%) scale(1.08); }
+        .image-container.show .bouquet-btn { opacity:1; }
+
+        /* ── music card ── */
+        .music-card {
+            background:rgba(255,255,255,0.18);
+            backdrop-filter:blur(22px);
+            -webkit-backdrop-filter:blur(22px);
+            padding: clamp(20px,2.5vh,36px) clamp(20px,2.5vw,36px);
+            border-radius: clamp(20px,2vw,40px);
+            box-shadow:0 15px 40px rgba(0,0,0,0.2);
+            width: clamp(260px, 28vw, 420px);
+            text-align:center;
+            border:1px solid rgba(255,255,255,0.3);
+            transition: all .6s cubic-bezier(.4,0,.2,1);
+            max-height: clamp(120px,18vh,160px);
+            overflow:hidden;
+            opacity:0;
+            transform:translateY(40px);
+            transition: opacity 1s ease .3s, transform 1s ease .3s, max-height .6s ease, background .3s;
+        }
+        .music-card.show { opacity:1; transform:translateY(0); }
+        .music-card:hover {
+            max-height:700px;
+            background:rgba(255,255,255,0.28);
+        }
+
+        .music-card h3 {
+            color:#f5dce8;
+            margin-bottom: clamp(12px,1.8vh,22px);
+            font-size: clamp(0.85rem,1.2vw,1.2rem);
+            letter-spacing:1px;
+        }
+
+        .controls {
+            display:flex;
+            justify-content:center;
+            gap: clamp(12px,1.5vw,22px);
+            margin-bottom: clamp(10px,1.5vh,20px);
+        }
+
+        .control-btn {
+            background:linear-gradient(135deg,#d4849a,#b86070);
+            border:none;
+            width:  clamp(38px,4vw,54px);
+            height: clamp(38px,4vw,54px);
+            border-radius:50%;
+            color:#fff;
+            cursor:pointer;
+            transition:.3s;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 5px 16px rgba(180,96,112,0.35);
+            font-size: clamp(0.8rem,1.1vw,1.1rem);
+        }
+        .control-btn:hover { transform:scale(1.12); }
+
+        .expand-content {
+            opacity:0;
+            transition:opacity .4s ease;
+            pointer-events:none;
+        }
+        .music-card:hover .expand-content {
+            opacity:1; pointer-events:auto;
+        }
+
+        .slider-box { margin: clamp(10px,1.5vh,20px) 0; }
+
+        input[type=range] {
+            accent-color:#d4849a;
+            cursor:pointer; height:4px;
+        }
+
+        label { color:#f5dce8; font-size:clamp(0.7rem,0.9vw,0.85rem); }
+
+        .time-row {
+            display:flex; justify-content:space-between;
+            font-size:clamp(0.75rem,1vw,1rem);
+            color:#f5dce8; margin-bottom:5px; width:100%;
+            align-items:center;
+        }
+        .time-row input { flex:1; margin:0 8px; }
+
+        .vol-row {
+            display:flex; flex-direction:row;
+            align-items:center; gap:10px;
+        }
+        .vol-row span { color:#f5dce8; }
+
+        .romantic-text {
+            font-style:italic;
+            color:rgba(255,240,245,0.9);
+            line-height:1.7;
+            margin-top: clamp(14px,2vh,24px);
+            font-size: clamp(0.78rem,0.95vw,0.95rem);
+            padding-top: clamp(12px,1.5vh,20px);
+            border-top:1px solid rgba(255,255,255,0.2);
+            font-weight:500;
+        }
+
+        /* particles */
+        .particle {
+            position:fixed; top:0; left:0;
+            pointer-events:none; z-index:50;
+            font-size:clamp(18px,2vw,26px);
+            will-change:transform,opacity;
+        }
+    </style>
+</head>
+<body>
+
+    <a class="nav-back" href="index.html">‹</a>
+    <p class="subtitle" id="mainText">A Moment of Pure Elegance</p>
+
+    <div class="stage" id="stage">
+
+        <div class="image-container" id="imgContainer">
+            <img src="Olivia/Olivia.jpg" alt="Princess" id="princessImg">
+            <button class="bouquet-btn" onclick="window.location.href='bouquet.html'">🌸 See Your Bouquet</button>
+        </div>
+
+        <div class="music-card" id="musicCard">
+            <h3 id="songTitle">Music Ready</h3>
+
+            <div class="controls">
+                <button class="control-btn" onclick="restartMusic()">↺</button>
+                <button class="control-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
+                <button class="control-btn" onclick="stopMusic()">■</button>
+            </div>
+
+            <div class="expand-content">
+                <div class="slider-box">
+                    <label>Seek Time</label>
+                    <div class="time-row">
+                        <span id="currentTime">0:00</span>
+                        <input type="range" id="progressSlider" value="0" min="0" max="100">
+                        <span id="durationTime">0:00</span>
+                    </div>
+                </div>
+
+                <div class="slider-box vol-row">
+                    <span>🔈</span>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" style="flex:1">
+                    <span>🔊</span>
+                </div>
+
+                <div class="romantic-text">
+                    In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry. You have a way of bringing light into the people around you, and the world is better with that light in it. Keep being you — you carry more goodness than you probably realize.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="loveSong">
+        <source src="assets/i_was_all_over_her.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+    const song          = document.getElementById('loveSong');
+    const playPauseBtn  = document.getElementById('playPauseBtn');
+    const progressSlider= document.getElementById('progressSlider');
+    const volumeSlider  = document.getElementById('volumeSlider');
+    const songTitle     = document.getElementById('songTitle');
+    const mainText      = document.getElementById('mainText');
+    const imgContainer  = document.getElementById('imgContainer');
+    const musicCard     = document.getElementById('musicCard');
+
+    const particles = ['🌸','🌹','💖','✨','🌷','🤍'];
+
+    // ── auto-reveal on load ──
+    window.addEventListener('load', () => {
+        imgContainer.classList.add('show');
+        musicCard.classList.add('show');
+        mainText.textContent = "Liv's World";
+        songTitle.textContent = "Now Playing: I Was All over her (Salvia Palth)";
+        song.play().catch(()=>{});
+        playPauseBtn.textContent = "||";
+
+        // particles burst from center of image
+        setTimeout(() => {
+            const rect = imgContainer.getBoundingClientRect();
+            const cx = rect.left + rect.width  / 2;
+            const cy = rect.top  + rect.height / 2;
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => createParticle(cx, cy), i * 6);
+            }
+        }, 600);
+    });
+
+    function createParticle(x, y) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = particles[Math.floor(Math.random() * particles.length)];
+        document.body.appendChild(p);
+        p.style.left = x + 'px';
+        p.style.top  = y + 'px';
+        p.style.transform = 'translate(-50%,-50%)';
+        const dx = (Math.random() - .5) * 700;
+        const dy = (Math.random() - .5) * 700;
+        p.animate([
+            { transform:'translate(-50%,-50%) scale(0)', opacity:1 },
+            { transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.5) rotate(720deg)`, opacity:0 }
+        ], { duration:3000, easing:'cubic-bezier(0.1,0.9,0.2,1)' }).onfinish = () => p.remove();
+    }
+
+    function togglePlay() {
+        if (song.paused) { song.play(); playPauseBtn.textContent="||"; }
+        else             { song.pause(); playPauseBtn.textContent="▶"; }
+    }
+    function restartMusic() { song.currentTime=0; song.play(); playPauseBtn.textContent="||"; }
+    function stopMusic()    { song.pause(); song.currentTime=0; playPauseBtn.textContent="▶"; }
+
+    song.addEventListener('timeupdate', () => {
+        const pct = (song.currentTime / song.duration) * 100;
+        progressSlider.value = pct;
+        currentTime.textContent = fmt(song.currentTime);
+    });
+    song.addEventListener('loadedmetadata', () => {
+        durationTime.textContent = fmt(song.duration);
+    });
+    progressSlider.addEventListener('input', () => {
+        song.currentTime = (progressSlider.value / 100) * song.duration;
+    });
+    volumeSlider.addEventListener('input', e => { song.volume = e.target.value; });
+
+    function fmt(s) {
+        const m = Math.floor(s/60), sec = Math.floor(s%60);
+        return m + ':' + (sec<10?'0':'') + sec;
+    }
+
+    const currentTime  = document.getElementById('currentTime');
+    const durationTime = document.getElementById('durationTime');
+    </script>
+</body>
+</html>
