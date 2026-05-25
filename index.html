@@ -8,65 +8,50 @@
     <link rel="icon" type="image/x-icon" href="Olivia/image.png">
     <style>
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html, body { width:100%; height:100%; font-family:'Playfair Display',serif; overflow:hidden; }
 
-        html, body {
-            width: 100%; height: 100%;
-            font-family: 'Playfair Display', serif;
-            overflow: hidden;
-        }
-
-        /* ── background lily ── */
         body::before {
-            content: "";
-            position: fixed; inset: 0;
-            background: url('assets/lilly.jpg') no-repeat center center;
-            background-size: cover;
-            filter: blur(6px) brightness(0.55);
-            transform: scale(1.08);
-            z-index: -1;
+            content:""; position:fixed; inset:0;
+            background:url('assets/lilly.jpg') no-repeat center center;
+            background-size:cover;
+            filter:blur(6px) brightness(0.55);
+            transform:scale(1.08); z-index:-1;
         }
 
-        /* ── 16:9 stage that fills the viewport ── */
         .stage {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(16px, 2.5vh, 32px);
+            width:100vw; height:100vh;
+            display:flex; flex-direction:column;
+            align-items:center; justify-content:center;
+            gap:clamp(16px,2.5vh,32px);
         }
 
         .subtitle {
-            color: #f5dce8;
-            font-size: clamp(1.2rem, 2.8vw, 2rem);
-            font-style: italic;
-            letter-spacing: 4px;
-            text-align: center;
-            text-shadow: 0 2px 18px rgba(0,0,0,0.5);
-            animation: softPulse 3s infinite ease-in-out;
+            color:#f5dce8;
+            font-size:clamp(1.2rem,2.8vw,2rem);
+            font-style:italic; letter-spacing:4px; text-align:center;
+            text-shadow:0 2px 18px rgba(0,0,0,0.5);
+            animation:softPulse 3s infinite ease-in-out;
         }
-
         @keyframes softPulse {
-            0%,100% { opacity:.7; transform:scale(1); }
-            50%      { opacity:1;  transform:scale(1.02); }
+            0%,100%{opacity:.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.02)}
         }
 
         #revealBtn {
-            padding: clamp(14px,1.8vh,22px) clamp(36px,4vw,60px);
-            background: linear-gradient(135deg,#d4849a,#b86070);
-            color: #fff;
-            border: none;
-            border-radius: 80px;
-            cursor: pointer;
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1rem, 1.6vw, 1.3rem);
-            letter-spacing: 3px;
-            box-shadow: 0 10px 36px rgba(180,80,100,0.45);
-            transition: transform .25s, box-shadow .25s;
+            padding:clamp(14px,1.8vh,22px) clamp(36px,4vw,60px);
+            background:linear-gradient(135deg,#d4849a,#b86070);
+            color:#fff; border:none; border-radius:80px; cursor:pointer;
+            font-family:'Playfair Display',serif;
+            font-size:clamp(1rem,1.6vw,1.3rem); letter-spacing:3px;
+            box-shadow:0 10px 36px rgba(180,80,100,0.45);
+            transition:transform .25s,box-shadow .25s;
         }
         #revealBtn:hover  { transform:scale(1.07); box-shadow:0 14px 44px rgba(180,80,100,0.55); }
         #revealBtn:active { transform:scale(0.96); }
+
+        @media(max-width:480px){
+            .subtitle{ font-size:clamp(1rem,5vw,1.4rem); letter-spacing:2px; }
+            #revealBtn{ padding:12px 32px; font-size:clamp(0.88rem,4vw,1.1rem); letter-spacing:2px; }
+        }
     </style>
 </head>
 <body>
