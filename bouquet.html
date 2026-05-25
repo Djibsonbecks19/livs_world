@@ -20,7 +20,7 @@ body>*{position:relative;z-index:1;}
    MINI MUSIC PLAYER — top-right
 ═══════════════════════════════ */
 #miniPlayer{
-  position:fixed;top:12px;right:12px;z-index:9999;
+  position:fixed;top:12px;right:1000px;z-index:9999;
   opacity:0;transform:translateY(-10px);
   transition:opacity .6s ease .4s,transform .6s ease .4s;
   max-width:min(260px, calc(100vw - 24px));
@@ -620,6 +620,11 @@ function fetchLanyard(){
 
 // ═══════════ ROBLOX ═══════════
 
+const CORS = "https://corsproxy.io/?";
+
+const MAIN_USER = "Ale45xis45";
+const TARGET_USER = "tanqr_headchot";
+
 /* ================= SAFE FETCH ================= */
 async function safeFetch(url, options = {}) {
   try {
@@ -632,32 +637,32 @@ async function safeFetch(url, options = {}) {
   }
 }
 
-/* ================= CONFIG ================= */
-const API = "https://surpise-rd42.onrender.com/";
-const MAIN_USER = "Ale45xis45";
-const TARGET_USER = "tanqr_headchot";
-
-
-/* ================= USER ID ================= */
+/* ================= GET USER ID ================= */
 async function getUserId(username) {
-  const data = await safeFetch(`${API}/userId`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ username })
-  });
+  const data = await safeFetch(
+    `${CORS}https://users.roproxy.com/v1/usernames/users`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usernames: [username],
+        excludeBannedUsers: false
+      })
+    }
+  );
 
   return data?.data?.[0]?.id || null;
 }
 
-/* ================= FRIENDS ================= */
+/* ================= GET FRIENDS (PAGINATED) ================= */
 async function getFriends(userId) {
   let friends = [];
   let cursor = null;
 
   do {
     const url = cursor
-      ? `https://friends.roproxy.com/v1/users/${userId}/friends?cursor=${cursor}`
-      : `https://friends.roproxy.com/v1/users/${userId}/friends`;
+      ? `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends?cursor=${cursor}`
+      : `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends`;
 
     const data = await safeFetch(url);
     if (!data) break;
@@ -669,124 +674,158 @@ async function getFriends(userId) {
   return friends;
 }
 
-/* ================= COUNTS ================= */
 async function getFriendsCount(userId) {
-  const d = await safeFetch(`${API}/friends/${userId}`);
-  return d?.count ?? 0;
+  const data = await safeFetch(
+    `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends/count`
+  );
+
+  return data?.count ?? 0;
 }
 
 async function getFollowersCount(userId) {
-  const d = await safeFetch(`${API}/followers/${userId}`);
-  return d?.count ?? 0;
+  const data = await safeFetch(
+    `${CORS}https://friends.roproxy.com/v1/users/${userId}/followers/count`
+  );
+
+  return data?.count ?? 0;
 }
+
 
 async function getFollowingCount(userId) {
-  const d = await safeFetch(`${API}/following/${userId}`);
-  return d?.count ?? 0;
-}
+  const data = await safeFetch(
+    `${CORS}https://friends.roproxy.com/v1/users/${userId}/followings/count`
+  );
 
-/* ================= ENRICH ================= */
+  return data?.count ?? 0;
+}
+/* ================= ENRICH FRIENDS (FIX DISPLAY NAME ISSUE) ================= */
 async function enrichFriends(friends) {
-  const ids = friends.map(f => f.id).filter(Boolean);
-  const map = new Map();
+  const clean = friends.filter(f => f.id && f.id > 0);
+
+  const ids = clean.map(f => f.id);
+  const userMap = new Map();
 
   for (let i = 0; i < ids.length; i += 100) {
     const batch = ids.slice(i, i + 100);
 
     const data = await safeFetch(
-      `https://users.roproxy.com/v1/users`,
+      `${CORS}https://users.roproxy.com/v1/users`,
       {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({ userIds: batch })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userIds: batch })
       }
     );
 
-    data?.data?.forEach(u => map.set(u.id, u));
+    data?.data?.forEach(u => {
+      userMap.set(u.id, u);
+    });
   }
 
-  return friends.map(f => {
-    const u = map.get(f.id);
+  return clean.map(f => {
+    const u = userMap.get(f.id);
+
     return {
       ...f,
       name: u?.name || f.name || "Unknown",
-      displayName: u?.displayName || u?.name || "Unknown"
+      displayName: u?.displayName || u?.name || f.displayName || "Unknown"
     };
   });
 }
 
-/* ================= IMAGES ================= */
+/* ================= HEADSHOT ================= */
 async function getHeadshot(userId) {
-  const d = await safeFetch(
-    `https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png`
+  const data = await safeFetch(
+    `${CORS}https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png`
   );
-  return d?.data?.[0]?.imageUrl || null;
+
+  return data?.data?.[0]?.imageUrl || null;
 }
 
+/* ================= AVATAR ================= */
 async function getAvatar(userId) {
-  const d = await safeFetch(
-    `https://thumbnails.roproxy.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png`
+  const data = await safeFetch(
+    `${CORS}https://thumbnails.roproxy.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png`
   );
-  return d?.data?.[0]?.imageUrl || null;
+
+  return data?.data?.[0]?.imageUrl || null;
 }
 
-/* ================= FIND USER ================= */
+/* ================= FIND USER IN FRIEND LIST ================= */
 function findUser(friends, username) {
   return friends.find(f =>
     (f.name || "").toLowerCase() === username.toLowerCase()
   );
 }
 
-/* ================= JOIN DATE ================= */
 async function getUserJoinDate(userId) {
-  const d = await safeFetch(`https://users.roproxy.com/v1/users/${userId}`);
-  return d?.created ? new Date(d.created) : null;
-}
+  const data = await safeFetch(
+    `${CORS}https://users.roproxy.com/v1/users/${userId}`
+  );
 
+  const created = data?.created; // ISO date string
+  if (!created) return null;
+
+  return new Date(created);
+}
 /* ================= MAIN ================= */
 async function loadRobloxSection() {
 
+  // 1. MAIN USER ID
   const mainId = await getUserId(MAIN_USER);
-  if (!mainId) return console.error("Main user not found");
+  if (!mainId) {
+    console.error("Main user not found");
+    return;
+  }
 
+  // 2. GET FRIENDS
   let friends = await getFriends(mainId);
+
+  // 3. FIX EMPTY NAMES
   friends = await enrichFriends(friends);
 
+  //console.log("Friends loaded:", friends.length, friends);
+
+  // 4. FIND TARGET USER
   const target = findUser(friends, TARGET_USER);
-  if (!target) return console.error("Target not found in friends");
+
+  //console.log("Target user:", target);
+
+  const [friendsCount, followersCount, followingCount, joinDate] = await Promise.all([
+    getFriendsCount(target.id),
+    getFollowersCount(target.id),
+    getFollowingCount(target.id),
+    getUserJoinDate(target.id)
+  ]);
+
+  if (!target) {
+    console.warn("❌ Target not found in friend list");
+    return;
+  }
 
   const targetId = target.id;
 
-  const [friendsCount, followersCount, followingCount, joinDate] =
-    await Promise.all([
-      getFriendsCount(targetId),
-      getFollowersCount(targetId),
-      getFollowingCount(targetId),
-      getUserJoinDate(targetId)
-    ]);
-
+  // 5. LOAD IMAGES
   const [headshot, avatar] = await Promise.all([
     getHeadshot(targetId),
     getAvatar(targetId)
   ]);
 
+  // 6. APPLY TO UI
   document.getElementById("rbDisplayName").textContent = target.displayName;
   document.getElementById("rbUsername").textContent = "@" + target.name;
 
   document.getElementById("rbFriends").textContent = friendsCount;
   document.getElementById("rbFollowers").textContent = followersCount;
   document.getElementById("rbFollowing").textContent = followingCount;
-
-  document.getElementById("rbJoined").textContent =
-    `Joined ${joinDate ? joinDate.toLocaleDateString() : "Unknown"}`;
+  document.getElementById("rbJoined").textContent = `Joined ${joinDate ? joinDate.toLocaleDateString() : "Unknown"}`;
 
   if (headshot) document.getElementById("rbHeadshot").src = headshot;
   if (avatar) document.getElementById("rbFullAvatar").src = avatar;
 
   document.getElementById("rbLastSeen").textContent =
-    `Found inside ${MAIN_USER}'s friends ✔`;
+    `Found inside ${MAIN_USER}'s friends ✔ It's my Alt`;
 }
-
 </script>
 </body>
 </html>
