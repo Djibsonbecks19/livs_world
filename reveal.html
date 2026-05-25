@@ -6,6 +6,7 @@
     <title>The Divine Reveal</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="Olivia/image.png">
+    <link rel="stylesheet" href="styles.css">
     <style>
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
         html, body {
@@ -34,6 +35,7 @@
             transition:background .25s,transform .2s; text-decoration:none;
         }
         .nav-back:hover { background:rgba(255,255,255,0.32); transform:scale(1.08); }
+        
         .stage {
             width:100%;
             min-height:100dvh;
@@ -54,17 +56,100 @@
             0%,100%{opacity:.75;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.02)}
         }
 
+        /* ===== FIXED CAROUSEL WITH PROPER IMAGE SIZING ===== */
         .image-container {
             flex-shrink:0;
-            width:clamp(200px,22vw,360px); height:clamp(460px,60vh,620px);
+            width:clamp(200px,22vw,360px); 
+            height:clamp(460px,60vh,620px);
             border-radius:clamp(16px,1.8vw,30px);
             border:clamp(4px,0.5vw,8px) solid rgba(255,255,255,0.85);
-            overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.45);
-            position:relative; opacity:0; transform:translateY(40px);
+            overflow:hidden; 
+            box-shadow:0 24px 60px rgba(0,0,0,0.45);
+            position:relative; 
+            opacity:0; 
+            transform:translateY(40px);
             transition:opacity 1s ease,transform 1s ease;
         }
         .image-container.show { opacity:1; transform:translateY(0); }
-        .image-container img { width:100%; height:100%; object-fit:cover; }
+        
+        .carousel-track {
+            display:flex;
+            width:100%;
+            height:100%;
+            transition:transform 0.5s ease-in-out;
+        }
+        
+        .carousel-slide {
+            min-width:100%;
+            height:100%;
+            flex-shrink:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            background:rgba(0,0,0,0.15);
+        }
+        
+        .carousel-slide img {
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            object-position:center center;
+        }
+
+        /* Carousel navigation */
+        .carousel-btn {
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            z-index:15;
+            background:rgba(255,255,255,0.25);
+            backdrop-filter:blur(8px);
+            border:1px solid rgba(255,255,255,0.3);
+            color:#f5dce8;
+            width:36px;
+            height:36px;
+            border-radius:50%;
+            cursor:pointer;
+            font-size:1.2rem;
+            transition:all 0.3s;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .carousel-btn:hover {
+            background:rgba(255,255,255,0.4);
+            transform:translateY(-50%) scale(1.1);
+        }
+        .carousel-btn.prev { left:10px; }
+        .carousel-btn.next { right:10px; }
+
+        /* Dots */
+        .carousel-dots {
+            position:absolute;
+            bottom:80px;
+            left:50%;
+            transform:translateX(-50%);
+            display:flex;
+            gap:8px;
+            z-index:15;
+        }
+        .carousel-dots .dot {
+            width:8px;
+            height:8px;
+            border-radius:50%;
+            background:rgba(255,255,255,0.4);
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .carousel-dots .dot.active {
+            background:#f5dce8;
+            transform:scale(1.3);
+        }
+        .carousel-dots .dot:hover {
+            background:rgba(255,255,255,0.7);
+        }
 
         .bouquet-btn {
             position:absolute; bottom:clamp(36px,5vh,56px); left:50%; transform:translateX(-50%);
@@ -79,6 +164,82 @@
         .bouquet-btn:hover { transform:translateX(-50%) scale(1.08); }
         .image-container.show .bouquet-btn { opacity:1; }
 
+        /* ===== BUNNY AESTHETIC ===== */
+        .bunny-ears-overlay {
+            position:absolute;
+            top:-30px;
+            left:50%;
+            transform:translateX(-50%);
+            display:flex;
+            gap:14px;
+            z-index:25;
+            pointer-events:none;
+        }
+        .bunny-ear {
+            width:14px;
+            height:35px;
+            background:rgba(255,200,220,0.6);
+            border-radius:50% 50% 0 0;
+            border:1.5px solid rgba(255,200,220,0.3);
+            animation:earWiggle 3s ease-in-out infinite;
+            transform-origin:bottom;
+        }
+        .bunny-ear:nth-child(2) { animation-delay:0.5s; }
+        @keyframes earWiggle {
+            0%,100% { transform:rotate(0deg); }
+            50% { transform:rotate(12deg); }
+        }
+
+        .bunny-floating {
+            position:absolute;
+            font-size:50px;
+            animation:floatBunny 4s ease-in-out infinite;
+            pointer-events:none;
+            opacity:1;
+            z-index:10;
+        }
+        @keyframes floatBunny {
+            0%,100% { transform:translateY(0px) rotate(0deg); }
+            50% { transform:translateY(-8px) rotate(8deg); }
+        }
+        .bunny-f1 { top:10px; left:5px; animation-delay:0s; }
+        .bunny-f2 { top:10px; right:5px; animation-delay:1s; }
+        .bunny-f3 { bottom:70px; left:5px; animation-delay:2s; }
+        .bunny-f4 { bottom:70px; right:5px; animation-delay:3s; }
+
+        /* Bunny corner decorations */
+        .bunny-corner {
+            position:absolute;
+            width:20px;
+            height:18px;
+            background:rgba(255,200,220,0.2);
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:10px;
+            border:1px solid rgba(255,200,220,0.15);
+            pointer-events:none;
+            z-index:8;
+        }
+        .bunny-corner::before { content:'🐰'; }
+        .bunny-corner.tl { top:5px; left:5px; }
+        .bunny-corner.tr { top:5px; right:5px; }
+        .bunny-corner.bl { bottom:70px; left:5px; }
+        .bunny-corner.br { bottom:70px; right:5px; }
+
+        /* Bunny border glow */
+        .bunny-glow {
+            position:absolute;
+            inset:-6px;
+            border-radius:clamp(20px,2vw,34px);
+            border:2px solid rgba(255,200,220,0.2);
+            pointer-events:none;
+            z-index:5;
+            box-shadow:0 0 30px rgba(255,180,200,0.1);
+        }
+
+        /* ===== MUSIC CARD WITH BUNNY FRAME ===== */
         .music-card {
             background:rgba(255,255,255,0.18); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
             padding:clamp(20px,2.5vh,36px) clamp(20px,2.5vw,36px);
@@ -88,9 +249,93 @@
             max-height:clamp(160px,18vh,160px); overflow:hidden;
             opacity:0; transform:translateY(40px);
             transition:opacity 1s ease .3s,transform 1s ease .3s,max-height .6s ease,background .3s;
+            position:relative;
+            overflow: visible !important;
         }
         .music-card.show { opacity:1; transform:translateY(0); }
         .music-card:hover { max-height:700px; background:rgba(255,255,255,0.28); }
+
+        /* ===== BUNNY FRAME IMAGES ON MUSIC CARD ===== */
+        .music-card-bunny-frame {
+            position:absolute;
+            top:-25px;
+            left:-25px;
+            right:-25px;
+            bottom:-25px;
+            pointer-events:none;
+            z-index:0;
+        }
+
+        .bunny-frame-img {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid rgba(255,200,220,0.4);
+            box-shadow: 0 4px 15px rgba(255,180,200,0.2);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            z-index: 20; /* Higher z-index to stay on top */
+            pointer-events: auto; /* Allow clicking/hovering */
+        }
+
+        .bunny-frame-img:hover {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+
+        .bunny-frame-img.tl {
+            top:-15px;
+            left:-15px;
+        }
+        .bunny-frame-img.tr {
+            top:-15px;
+            right:-15px;
+        }
+        .bunny-frame-img.bl {
+            bottom:-15px;
+            left:-15px;
+        }
+        .bunny-frame-img.br {
+            bottom:-15px;
+            right:-15px;
+        }
+
+        /* Add bunny images at top corners of music card */
+        .bunny-frame-img.top-left {
+            top: -30px;  /* Moves it above the card */
+            left: -30px; /* Moves it to the left of the card */
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Position on top-right of music card - FULLY OUTSIDE */
+        .bunny-frame-img.top-right {
+            top: -30px;
+            right: -30px;
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Optional: Add bottom corners too */
+        .bunny-frame-img.bottom-left {
+            bottom: -30px;
+            left: -30px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .bunny-frame-img.bottom-right {
+            bottom: -30px;
+            right: -30px;
+            width: 60px;
+            height: 60px;
+        }
+        /* Music card content */
+        .music-card-content {
+            position:relative;
+            z-index:1;
+        }
 
         .music-card h3 {
             color:#f5dce8; margin-bottom:clamp(12px,1.8vh,22px);
@@ -135,22 +380,26 @@
                 justify-content:flex-start;
                 align-items:center;
                 gap:18px;
-
                 min-height:100dvh;
                 height:auto;
-
                 padding:80px 16px 40px;
             }
-
             .image-container{
                 width:min(240px,70vw);
                 height:min(420px,75vh);
             }
-
             .music-card{
                 width:100%;
                 max-width:420px;
             }
+            .bunny-frame-img.top-left,
+            .bunny-frame-img.top-right {
+                width:40px;
+                height:40px;
+                top:-15px;
+            }
+            .bunny-frame-img.top-left { left:-15px; }
+            .bunny-frame-img.top-right { right:-15px; }
         }
         @media(min-width:641px) and (max-width:900px){
             .stage{ gap:clamp(14px,2.5vw,32px); padding:56px 14px 16px; }
@@ -161,40 +410,72 @@
 </head>
 <body>
     <a class="nav-back" href="index.html" id="backBtn">‹</a>
-    <p class="subtitle" id="mainText">A Moment of Pure Elegance</p>
+    <p class="subtitle" id="mainText">A Moment of Pure Elegance 🐰</p>
 
     <div class="stage" id="stage">
         <div class="image-container" id="imgContainer">
-            <img src="Olivia/Olivia.jpg" alt="Princess" id="princessImg">
+            <!-- Bunny decorations -->
+            <div class="bunny-ears-overlay">
+                <div class="bunny-ear"></div>
+                <div class="bunny-ear"></div>
+                <img src="Olivia/1.jpg" class="bunny-frame-img tl" alt="Bunny Frame Left">
+            </div>
+            <div class="bunny-corner tl"></div>
+            <div class="bunny-corner tr"></div>
+            <div class="bunny-corner bl"></div>
+            <div class="bunny-corner br"></div>
+            <div class="bunny-floating bunny-f1">🐰</div>
+            <div class="bunny-floating bunny-f2">🐰</div>
+            <div class="bunny-floating bunny-f3">🐰</div>
+            <div class="bunny-floating bunny-f4">🐰</div>
+            <div class="bunny-glow"></div>
+
+            <!-- CAROUSEL -->
+            <div class="carousel-track" id="carouselInner">
+                <div class="carousel-slide"><img src="Olivia/Olivia.jpg" alt="Princess"></div>
+                <!-- Add more slides here -->
+            </div>
+
+            <button class="carousel-btn prev" id="prevBtn">‹</button>
+            <button class="carousel-btn next" id="nextBtn">›</button>
             <button class="bouquet-btn" id="bouquetBtn">🌸 See Your Bouquet</button>
+            <div class="carousel-dots" id="carouselDots"></div>
         </div>
 
         <div class="music-card" id="musicCard">
-            <h3 id="songTitle">Music Ready</h3>
-            <div class="controls">
-                <button class="control-btn" onclick="restartMusic()">↺</button>
-                <button class="control-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
-                <button class="control-btn" onclick="stopMusic()">■</button>
-            </div>
-            <div class="expand-content">
-                <div class="slider-box">
-                    <label>Seek Time</label>
-                    <div class="time-row">
-                        <span id="currentTime">0:00</span>
-                        <input type="range" id="progressSlider" value="0" min="0" max="100">
-                        <span id="durationTime">0:00</span>
+            <!-- BUNNY FRAME IMAGES ON TOP CORNERS -->
+            <img src="Olivia/1.jpg" class="bunny-frame-img top-left" alt="Bunny Frame Left">
+            <img src="Olivia/2.jpg" class="bunny-frame-img top-right" alt="Bunny Frame Right">
+            
+            <div class="music-card-content">
+                <!-- Mini bunny on music card -->
+                <div class="music-bunny">🐰</div>
+                <h3 id="songTitle">Music Ready</h3>
+                <div class="controls">
+                    <button class="control-btn" onclick="restartMusic()">↺</button>
+                    <button class="control-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
+                    <button class="control-btn" onclick="stopMusic()">■</button>
+                </div>
+                <div class="expand-content">
+                    <div class="slider-box">
+                        <label>Seek Time</label>
+                        <div class="time-row">
+                            <span id="currentTime">0:00</span>
+                            <input type="range" id="progressSlider" value="0" min="0" max="100">
+                            <span id="durationTime">0:00</span>
+                        </div>
                     </div>
-                </div>
-                <div class="slider-box vol-row">
-                    <span>🔈</span>
-                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" style="flex:1">
-                    <span>🔊</span>
-                </div>
-                <div class="romantic-text">
-                    In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry. 
-                    You have a way of bringing light into the people around you, 
-                    and the world is better with that light in it. Keep being you 
-                    you carry more goodness than you probably realize.
+                    <div class="slider-box vol-row">
+                        <span>🔈</span>
+                        <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" style="flex:1">
+                        <span>🔊</span>
+                    </div>
+                    <div class="romantic-text">
+                        In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry. 
+                        You have a way of bringing light into the people around you, 
+                        and the world is better with that light in it. Keep being you 
+                        you carry more goodness than you probably realize. 🐰
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,97 +486,155 @@
     </audio>
 
     <script>
-    const song          = document.getElementById('loveSong');
-    const playPauseBtn  = document.getElementById('playPauseBtn');
-    const progressSlider= document.getElementById('progressSlider');
-    const volumeSlider  = document.getElementById('volumeSlider');
-    const songTitle     = document.getElementById('songTitle');
-    const mainText      = document.getElementById('mainText');
-    const imgContainer  = document.getElementById('imgContainer');
-    const musicCard     = document.getElementById('musicCard');
-    const currentTime   = document.getElementById('currentTime');
-    const durationTime  = document.getElementById('durationTime');
-    const bouquetBtn    = document.getElementById('bouquetBtn');
-    const backBtn       = document.getElementById('backBtn');
-    const particles     = ['🌸','🌹','💖','✨','🌷','🤍'];
+        // ═══════════ MUSIC PLAYER ═══════════
+        const song = document.getElementById('loveSong');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressSlider = document.getElementById('progressSlider');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const songTitle = document.getElementById('songTitle');
+        const mainText = document.getElementById('mainText');
+        const imgContainer = document.getElementById('imgContainer');
+        const musicCard = document.getElementById('musicCard');
+        const currentTime = document.getElementById('currentTime');
+        const durationTime = document.getElementById('durationTime');
+        const bouquetBtn = document.getElementById('bouquetBtn');
+        const backBtn = document.getElementById('backBtn');
+        const particles = ['🌸','🌹','💖','✨','🌷','🤍','🐰'];
 
-    // Save state before navigating away
-    function saveState() {
-        sessionStorage.setItem('mp_time',    song.currentTime);
-        sessionStorage.setItem('mp_playing', !song.paused);
-        sessionStorage.setItem('mp_volume',  song.volume);
-    }
+        // ═══════════ CAROUSEL ═══════════
+        const carouselInner = document.getElementById('carouselInner');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('carouselDots');
 
-    bouquetBtn.addEventListener('click', () => { saveState(); window.location.href = 'bouquet.html'; });
-    backBtn.addEventListener('click', (e) => { e.preventDefault(); saveState(); window.location.href = 'index.html'; });
-    window.addEventListener('beforeunload', saveState);
-    window.addEventListener('pagehide', saveState);
+        const slides = carouselInner.querySelectorAll('.carousel-slide');
+        let currentIndex = 0;
 
-    function fmt(s) {
-        if (!s || isNaN(s)) return '0:00';
-        const m = Math.floor(s/60), sec = Math.floor(s%60);
-        return m + ':' + (sec<10?'0':'') + sec;
-    }
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+        }
 
-    function togglePlay() {
-        if (song.paused) { song.play(); playPauseBtn.textContent='||'; }
-        else             { song.pause(); playPauseBtn.textContent='▶'; }
-    }
-    function restartMusic() { song.currentTime=0; song.play(); playPauseBtn.textContent='||'; }
-    function stopMusic()    { song.pause(); song.currentTime=0; playPauseBtn.textContent='▶'; }
+        function updateDots() {
+            const dots = dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
 
-    song.addEventListener('timeupdate', () => {
-        const pct = (song.currentTime / song.duration) * 100;
-        progressSlider.value = pct;
-        currentTime.textContent = fmt(song.currentTime);
-    });
-    song.addEventListener('loadedmetadata', () => { durationTime.textContent = fmt(song.duration); });
-    progressSlider.addEventListener('input', () => { song.currentTime = (progressSlider.value/100) * song.duration; });
-    volumeSlider.addEventListener('input', e => { song.volume = e.target.value; });
+        function goToSlide(index) {
+            currentIndex = index;
+            carouselInner.style.transform = `translateX(-${index * 100}%)`;
+            updateDots();
+        }
 
-    function createParticle(x, y) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.textContent = particles[Math.floor(Math.random() * particles.length)];
-        document.body.appendChild(p);
-        p.style.left = x+'px'; p.style.top = y+'px';
-        p.style.transform = 'translate(-50%,-50%)';
-        const dx = (Math.random()-.5)*700, dy = (Math.random()-.5)*700;
-        p.animate([
-            {transform:'translate(-50%,-50%) scale(0)',opacity:1},
-            {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.5) rotate(720deg)`,opacity:0}
-        ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish = () => p.remove();
-    }
+        function nextSlide() {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            goToSlide(nextIndex);
+        }
 
-    // Restore or start fresh
-    window.addEventListener('load', () => {
-        const savedTime    = parseFloat(sessionStorage.getItem('mp_time')    || '0');
-        const wasPlaying   = sessionStorage.getItem('mp_playing') === 'true';
-        const savedVol     = parseFloat(sessionStorage.getItem('mp_volume')  || '1');
+        function prevSlide() {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            goToSlide(prevIndex);
+        }
 
-        imgContainer.classList.add('show');
-        musicCard.classList.add('show');
-        mainText.textContent = "Liv's World";
-        songTitle.textContent = "Now Playing: I Was All Over Her";
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
 
-        song.volume = savedVol;
-        volumeSlider.value = savedVol;
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
 
-        // Always play on reveal page load — it's the reveal moment
-        song.addEventListener('canplay', function onCanPlay() {
-            song.removeEventListener('canplay', onCanPlay);
-            if (savedTime > 0) song.currentTime = savedTime;
-            song.play().catch(()=>{});
-            playPauseBtn.textContent = '||';
-        }, {once:true});
+        createDots();
 
-        // Particle burst
-        setTimeout(() => {
-            const rect = imgContainer.getBoundingClientRect();
-            const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-            for (let i=0;i<80;i++) setTimeout(()=>createParticle(cx,cy), i*6);
-        }, 600);
-    });
+        // ═══════════ STATE MANAGEMENT ═══════════
+        function saveState() {
+            sessionStorage.setItem('mp_time',    song.currentTime);
+            sessionStorage.setItem('mp_playing', !song.paused);
+            sessionStorage.setItem('mp_volume',  song.volume);
+        }
+
+        bouquetBtn.addEventListener('click', () => { saveState(); window.location.href = 'bouquet.html'; });
+        backBtn.addEventListener('click', (e) => { e.preventDefault(); saveState(); window.location.href = 'index.html'; });
+        window.addEventListener('beforeunload', saveState);
+        window.addEventListener('pagehide', saveState);
+
+        function fmt(s) {
+            if (!s || isNaN(s)) return '0:00';
+            const m = Math.floor(s/60), sec = Math.floor(s%60);
+            return m + ':' + (sec<10?'0':'') + sec;
+        }
+
+        function togglePlay() {
+            if (song.paused) { song.play(); playPauseBtn.textContent='||'; }
+            else { song.pause(); playPauseBtn.textContent='▶'; }
+        }
+
+        function restartMusic() { song.currentTime=0; song.play(); playPauseBtn.textContent='||'; }
+        function stopMusic() { song.pause(); song.currentTime=0; playPauseBtn.textContent='▶'; }
+
+        song.addEventListener('timeupdate', () => {
+            const pct = (song.currentTime / song.duration) * 100;
+            progressSlider.value = pct;
+            currentTime.textContent = fmt(song.currentTime);
+        });
+
+        song.addEventListener('loadedmetadata', () => { durationTime.textContent = fmt(song.duration); });
+
+        progressSlider.addEventListener('input', () => {
+            song.currentTime = (progressSlider.value/100) * song.duration;
+        });
+
+        volumeSlider.addEventListener('input', e => { song.volume = e.target.value; });
+
+        function createParticle(x, y) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.textContent = particles[Math.floor(Math.random() * particles.length)];
+            document.body.appendChild(p);
+            p.style.left = x+'px'; p.style.top = y+'px';
+            p.style.transform = 'translate(-50%,-50%)';
+            const dx = (Math.random()-.5)*700, dy = (Math.random()-.5)*700;
+            p.animate([
+                {transform:'translate(-50%,-50%) scale(0)',opacity:1},
+                {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.5) rotate(720deg)`,opacity:0}
+            ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish = () => p.remove();
+        }
+
+        // ═══════════ LOAD ═══════════
+        window.addEventListener('load', () => {
+            const savedTime = parseFloat(sessionStorage.getItem('mp_time') || '0');
+            const wasPlaying = sessionStorage.getItem('mp_playing') === 'true';
+            const savedVol = parseFloat(sessionStorage.getItem('mp_volume') || '1');
+
+            imgContainer.classList.add('show');
+            musicCard.classList.add('show');
+            mainText.textContent = "Liv's World 🐰";
+            songTitle.textContent = "Now Playing: I Was All Over Her";
+
+            song.volume = savedVol;
+            volumeSlider.value = savedVol;
+
+            song.addEventListener('canplay', function onCanPlay() {
+                song.removeEventListener('canplay', onCanPlay);
+                if (savedTime > 0) song.currentTime = savedTime;
+                song.play().catch(()=>{});
+                playPauseBtn.textContent = '||';
+            }, {once:true});
+
+            setTimeout(() => {
+                const rect = imgContainer.getBoundingClientRect();
+                const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+                for (let i=0;i<80;i++) setTimeout(()=>createParticle(cx,cy), i*6);
+            }, 600);
+        });
     </script>
 </body>
 </html>

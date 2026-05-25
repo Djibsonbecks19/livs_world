@@ -202,6 +202,166 @@ canvas{
 }
 
 /* ═══════════════════════════════
+   BUNNY DECORATIONS - UPDATED WITH IMAGES
+═══════════════════════════════ */
+.bunny-frame {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  pointer-events: none;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 200, 220, 0.25);
+  z-index: 5;
+}
+
+.bunny-ears {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 6;
+}
+
+.bunny-ear {
+  width: 14px;
+  height: 35px;
+  background: rgba(255, 200, 220, 0.5);
+  border-radius: 50% 50% 0 0;
+  border: 1.5px solid rgba(255, 200, 220, 0.2);
+  animation: earWiggle 3s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.bunny-ear:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes earWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(12deg); }
+}
+
+.bunny-ear::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 18px;
+  background: rgba(255, 230, 240, 0.3);
+  border-radius: 50% 50% 0 0;
+}
+
+.bunny-face {
+  position: absolute;
+  width: 24px;
+  height: 20px;
+  background: rgba(255, 200, 220, 0.25);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  border: 1px solid rgba(255, 200, 220, 0.15);
+}
+
+.bunny-face::before { content: '🐰'; font-size: 12px; }
+.bunny-face.corner-tl { top: -8px; left: -8px; }
+.bunny-face.corner-tr { top: -8px; right: -8px; }
+.bunny-face.corner-bl { bottom: -8px; left: -8px; }
+.bunny-face.corner-br { bottom: -8px; right: -8px; }
+
+/* Floating bunny images instead of emojis */
+.floating-bunny {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 200, 220, 0.3);
+  object-fit: cover;
+  animation: floatBunny 4s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 4;
+  box-shadow: 0 4px 12px rgba(255, 180, 200, 0.2);
+}
+
+@keyframes floatBunny {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(8deg); }
+}
+
+.bunny-1 { top: -12px; left: -10px; animation-delay: 0s; }
+.bunny-2 { top: -12px; right: -10px; animation-delay: 1s; }
+.bunny-3 { bottom: -12px; left: -10px; animation-delay: 2s; }
+.bunny-4 { bottom: -12px; right: -10px; animation-delay: 3s; }
+
+/* Bunnies around bouquet - using images */
+.bouquet-bunnies {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.bunny-sprite {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 200, 220, 0.3);
+  object-fit: cover;
+  animation: hopBunny 3.5s ease-in-out infinite;
+  opacity: 0.7;
+  box-shadow: 0 4px 15px rgba(255, 180, 200, 0.2);
+}
+
+.bunny-sprite:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+.bunny-sprite:nth-child(2) { top: 15%; right: 5%; animation-delay: 0.8s; }
+.bunny-sprite:nth-child(3) { bottom: 15%; left: 8%; animation-delay: 1.6s; }
+.bunny-sprite:nth-child(4) { bottom: 20%; right: 8%; animation-delay: 2.4s; }
+
+@keyframes hopBunny {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+  25% { transform: translateY(-12px) scale(1.05) rotate(-4deg); }
+  50% { transform: translateY(-4px) scale(0.95) rotate(4deg); }
+  75% { transform: translateY(-16px) scale(1.05) rotate(-3deg); }
+}
+
+/* Bunny badge (MUI style dot replacement) */
+.bunny-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: rgba(255, 200, 220, 0.7);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(255, 150, 180, 0.3);
+  animation: pulseBadge 2.5s ease-in-out infinite;
+  border: 2px solid #1e1b2e;
+  z-index: 30;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ═══════════════════════════════
    DISCORD CARD (fully visible)
 ═══════════════════════════════ */
 .dc-card{
@@ -215,6 +375,7 @@ canvas{
   flex-shrink:0;
   width:100%;
   background:#1e1b2e;
+  position:relative;
 }
 .dc-card.show{
   opacity:1;
@@ -305,6 +466,7 @@ canvas{
   flex-shrink:0;
   width:100%;
   background:#0f0f1a;
+  position:relative;
 }
 .rb-card.show{
   opacity:1;
@@ -473,12 +635,38 @@ canvas{
     Your Lily Bouquet
   </div>
   
-  <div id="canvas-wrap"><canvas id="c"></canvas></div>
+  <div id="canvas-wrap">
+    <canvas id="c"></canvas>
+    <!-- BUNNIES AROUND BOUQUET - USING IMAGES -->
+    <div class="bouquet-bunnies">
+      <img src="Olivia/1.jpg" class="bunny-sprite" alt="Bunny 1">
+      <img src="Olivia/3.jpg" class="bunny-sprite" alt="Bunny 3">
+      <img src="Olivia/4.jpg" class="bunny-sprite" alt="Bunny 4">
+      <img src="Olivia/5.jpg" class="bunny-sprite" alt="Bunny 5">
+    </div>
+  </div>
 
   <div class="side-col">
 
-    <!-- DISCORD CARD -->
+    <!-- DISCORD CARD WITH BUNNY FRAME -->
     <div class="dc-card" id="discordCard">
+      <!-- BUNNY FRAME -->
+      <div class="bunny-frame">
+        <div class="bunny-ears">
+          <div class="bunny-ear"></div>
+          <div class="bunny-ear"></div>
+        </div>
+        <div class="bunny-face corner-tl"></div>
+        <div class="bunny-face corner-tr"></div>
+        <div class="bunny-face corner-bl"></div>
+        <div class="bunny-face corner-br"></div>
+        <!-- Floating bunny images around the card -->
+        <img src="Olivia/1.jpg" class="floating-bunny bunny-1" alt="Bunny 1">
+        <img src="Olivia/3.jpg" class="floating-bunny bunny-2" alt="Bunny 3">
+        <img src="Olivia/4.jpg" class="floating-bunny bunny-3" alt="Bunny 4">
+        <img src="Olivia/5.jpg" class="floating-bunny bunny-4" alt="Bunny 5">
+      </div>
+      
       <div class="dc-banner"></div>
       <div class="dc-body-wrap">
         <div class="dc-avatar-row">
@@ -486,6 +674,8 @@ canvas{
             <img id="dcAvatarImg" src="" alt="avatar">
             <div class="dc-deco"></div>
             <div class="dc-status-dot offline" id="dcDot"></div>
+            <!-- BUNNY BADGE ON AVATAR -->
+            <div class="bunny-badge">🐰</div>
           </div>
           <div class="dc-guild-tag"><div class="dc-guild-dot"></div>kiỻಉ</div>
         </div>
@@ -517,8 +707,25 @@ canvas{
       </div>
     </div>
 
-    <!-- ROBLOX CARD -->
+    <!-- ROBLOX CARD WITH BUNNY FRAME -->
     <div class="rb-card" id="robloxCard">
+      <!-- BUNNY FRAME -->
+      <div class="bunny-frame">
+        <div class="bunny-ears">
+          <div class="bunny-ear"></div>
+          <div class="bunny-ear"></div>
+        </div>
+        <div class="bunny-face corner-tl"></div>
+        <div class="bunny-face corner-tr"></div>
+        <div class="bunny-face corner-bl"></div>
+        <div class="bunny-face corner-br"></div>
+        <!-- Floating bunny images around the card -->
+        <img src="Olivia/1.jpg" class="floating-bunny bunny-1" alt="Bunny 1">
+        <img src="Olivia/3.jpg" class="floating-bunny bunny-2" alt="Bunny 3">
+        <img src="Olivia/4.jpg" class="floating-bunny bunny-3" alt="Bunny 4">
+        <img src="Olivia/5.jpg" class="floating-bunny bunny-4" alt="Bunny 5">
+      </div>
+      
       <div class="rb-header">
         <div class="rb-logo">
           <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -562,7 +769,8 @@ canvas{
         <span class="rb-badge" id="rbJoined">Joined –</span>
       </div>
     </div>
-        <button id="again" onclick="rebloom()">
+    
+    <button id="again" onclick="rebloom()">
       ↺ Bloom Again
     </button>
   </div>
