@@ -618,11 +618,9 @@ function fetchLanyard(){
   setTimeout(fetchLanyard,30000);
 }
 
-// ═══════════ ROBLOX ═══════════
+// ═══════════ ROBLOX (FIXED FOR RENDER) ═══════════
 
-const CORS = "https://corsproxy.io/?";
-
-const MAIN_USER = "Ale45xis45";
+const API = window.location.origin; 
 const TARGET_USER = "tanqr_headchot";
 
 /* ================= SAFE FETCH ================= */
@@ -639,192 +637,99 @@ async function safeFetch(url, options = {}) {
 
 /* ================= GET USER ID ================= */
 async function getUserId(username) {
-  const data = await safeFetch(
-    `${CORS}https://users.roproxy.com/v1/usernames/users`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        usernames: [username],
-        excludeBannedUsers: false
-      })
-    }
-  );
+  const data = await safeFetch(`${API}/userId`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username })
+  });
 
   return data?.data?.[0]?.id || null;
 }
 
-/* ================= GET FRIENDS (PAGINATED) ================= */
-async function getFriends(userId) {
-  let friends = [];
-  let cursor = null;
-
-  do {
-    const url = cursor
-      ? `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends?cursor=${cursor}`
-      : `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends`;
-
-    const data = await safeFetch(url);
-    if (!data) break;
-
-    friends.push(...(data.data || []));
-    cursor = data.nextPageCursor;
-  } while (cursor);
-
-  return friends;
-}
-
+/* ================= GET COUNTS ================= */
 async function getFriendsCount(userId) {
-  const data = await safeFetch(
-    `${CORS}https://friends.roproxy.com/v1/users/${userId}/friends/count`
-  );
-
+  const data = await safeFetch(`${API}/friends/${userId}`);
   return data?.count ?? 0;
 }
 
 async function getFollowersCount(userId) {
-  const data = await safeFetch(
-    `${CORS}https://friends.roproxy.com/v1/users/${userId}/followers/count`
-  );
-
+  const data = await safeFetch(`${API}/followers/${userId}`);
   return data?.count ?? 0;
 }
-
 
 async function getFollowingCount(userId) {
-  const data = await safeFetch(
-    `${CORS}https://friends.roproxy.com/v1/users/${userId}/followings/count`
-  );
-
+  const data = await safeFetch(`${API}/following/${userId}`);
   return data?.count ?? 0;
 }
-/* ================= ENRICH FRIENDS (FIX DISPLAY NAME ISSUE) ================= */
-async function enrichFriends(friends) {
-  const clean = friends.filter(f => f.id && f.id > 0);
 
-  const ids = clean.map(f => f.id);
-  const userMap = new Map();
-
-  for (let i = 0; i < ids.length; i += 100) {
-    const batch = ids.slice(i, i + 100);
-
-    const data = await safeFetch(
-      `${CORS}https://users.roproxy.com/v1/users`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userIds: batch })
-      }
-    );
-
-    data?.data?.forEach(u => {
-      userMap.set(u.id, u);
-    });
-  }
-
-  return clean.map(f => {
-    const u = userMap.get(f.id);
-
-    return {
-      ...f,
-      name: u?.name || f.name || "Unknown",
-      displayName: u?.displayName || u?.name || f.displayName || "Unknown"
-    };
-  });
-}
-
-/* ================= HEADSHOT ================= */
+/* ================= IMAGES ================= */
 async function getHeadshot(userId) {
   const data = await safeFetch(
-    `${CORS}https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png`
+    `https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png`
   );
 
   return data?.data?.[0]?.imageUrl || null;
 }
 
-/* ================= AVATAR ================= */
 async function getAvatar(userId) {
   const data = await safeFetch(
-    `${CORS}https://thumbnails.roproxy.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png`
+    `https://thumbnails.roproxy.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png`
   );
 
   return data?.data?.[0]?.imageUrl || null;
 }
 
-/* ================= FIND USER IN FRIEND LIST ================= */
-function findUser(friends, username) {
-  return friends.find(f =>
-    (f.name || "").toLowerCase() === username.toLowerCase()
-  );
+/* ================= USER INFO ================= */
+async function getUserInfo(userId) {
+  return await safeFetch(`${API}/user/${userId}`);
 }
 
-async function getUserJoinDate(userId) {
-  const data = await safeFetch(
-    `${CORS}https://users.roproxy.com/v1/users/${userId}`
-  );
-
-  const created = data?.created; // ISO date string
-  if (!created) return null;
-
-  return new Date(created);
-}
 /* ================= MAIN ================= */
 async function loadRobloxSection() {
+  try {
+    // 1. GET TARGET USER ID
+    const targetId = await getUserId(TARGET_USER);
 
-  // 1. MAIN USER ID
-  const mainId = await getUserId(MAIN_USER);
-  if (!mainId) {
-    console.error("Main user not found");
-    return;
+    if (!targetId) {
+      console.error("❌ Target user not found");
+      return;
+    }
+
+    // 2. FETCH ALL DATA IN PARALLEL
+    const [userInfo, friendsCount, followersCount, followingCount, headshot, avatar] =
+      await Promise.all([
+        getUserInfo(targetId),
+        getFriendsCount(targetId),
+        getFollowersCount(targetId),
+        getFollowingCount(targetId),
+        getHeadshot(targetId),
+        getAvatar(targetId)
+      ]);
+
+    // 3. APPLY UI
+    document.getElementById("rbDisplayName").textContent =
+      userInfo?.displayName || TARGET_USER;
+
+    document.getElementById("rbUsername").textContent =
+      "@" + (userInfo?.name || TARGET_USER);
+
+    document.getElementById("rbFriends").textContent = friendsCount;
+    document.getElementById("rbFollowers").textContent = followersCount;
+    document.getElementById("rbFollowing").textContent = followingCount;
+
+    document.getElementById("rbJoined").textContent =
+      `Joined ${userInfo?.created
+        ? new Date(userInfo.created).toLocaleDateString()
+        : "Unknown"}`;
+
+    if (headshot) document.getElementById("rbHeadshot").src = headshot;
+    if (avatar) document.getElementById("rbFullAvatar").src = avatar;
+
+    document.getElementById("rbLastSeen").textContent =
+      "Loaded from Render backend ✔";
+  } catch (err) {
+    console.error("Roblox section failed:", err);
   }
-
-  // 2. GET FRIENDS
-  let friends = await getFriends(mainId);
-
-  // 3. FIX EMPTY NAMES
-  friends = await enrichFriends(friends);
-
-  //console.log("Friends loaded:", friends.length, friends);
-
-  // 4. FIND TARGET USER
-  const target = findUser(friends, TARGET_USER);
-
-  //console.log("Target user:", target);
-
-  const [friendsCount, followersCount, followingCount, joinDate] = await Promise.all([
-    getFriendsCount(target.id),
-    getFollowersCount(target.id),
-    getFollowingCount(target.id),
-    getUserJoinDate(target.id)
-  ]);
-
-  if (!target) {
-    console.warn("❌ Target not found in friend list");
-    return;
-  }
-
-  const targetId = target.id;
-
-  // 5. LOAD IMAGES
-  const [headshot, avatar] = await Promise.all([
-    getHeadshot(targetId),
-    getAvatar(targetId)
-  ]);
-
-  // 6. APPLY TO UI
-  document.getElementById("rbDisplayName").textContent = target.displayName;
-  document.getElementById("rbUsername").textContent = "@" + target.name;
-
-  document.getElementById("rbFriends").textContent = friendsCount;
-  document.getElementById("rbFollowers").textContent = followersCount;
-  document.getElementById("rbFollowing").textContent = followingCount;
-  document.getElementById("rbJoined").textContent = `Joined ${joinDate ? joinDate.toLocaleDateString() : "Unknown"}`;
-
-  if (headshot) document.getElementById("rbHeadshot").src = headshot;
-  if (avatar) document.getElementById("rbFullAvatar").src = avatar;
-
-  document.getElementById("rbLastSeen").textContent =
-    `Found inside ${MAIN_USER}'s friends ✔ It's my Alt`;
 }
 </script>
 </body>
