@@ -1,640 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Divine Reveal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="Olivia/image.png">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        html, body {
-            width:100%;
-            height:100%;
-            min-height:100dvh;
-            font-family:'Playfair Display',serif;
-            overflow-x:hidden;
-            overflow-y:auto;
-        }
-        body::before {
-            content:""; position:fixed; inset:0;
-            background:url('assets/lilly.jpg') no-repeat center center;
-            background-size:cover;
-            filter:blur(6px) brightness(0.55);
-            transform:scale(1.08); z-index:-1;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Divine Reveal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="Olivia/image.png">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;min-height:100dvh;font-family:'Playfair Display',serif;overflow-x:hidden;overflow-y:auto;}
 
-        .nav-back {
-            position:fixed; top:clamp(14px,2vh,24px); left:clamp(14px,2vw,28px);
-            z-index:300; background:rgba(255,255,255,0.18); backdrop-filter:blur(12px);
-            border:1.5px solid rgba(255,255,255,0.3); color:#f5dce8; font-size:1.4rem;
-            width:46px; height:46px; border-radius:50%; cursor:pointer;
-            display:flex; align-items:center; justify-content:center;
-            box-shadow:0 4px 16px rgba(0,0,0,0.2);
-            transition:background .25s,transform .2s; text-decoration:none;
-        }
-        .nav-back:hover { background:rgba(255,255,255,0.32); transform:scale(1.08); }
-        
-        .stage {
-            width:100%;
-            min-height:100dvh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:clamp(24px,3.5vw,56px);
-            padding:clamp(60px,8vh,100px) clamp(20px,4vw,60px) clamp(40px,6vh,60px);
-        }
-        .subtitle {
-            position:fixed; top:clamp(14px,2.5vh,28px); left:50%; transform:translateX(-50%);
-            color:#f5dce8; font-size:clamp(1rem,1.8vw,1.5rem);
-            font-style:italic; letter-spacing:3px;
-            text-shadow:0 2px 16px rgba(0,0,0,0.6); white-space:nowrap; z-index:10;
-            animation:softPulse 3s infinite ease-in-out;
-        }
-        @keyframes softPulse {
-            0%,100%{opacity:.75;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.02)}
-        }
+body::before{
+  content:"";position:fixed;inset:0;
+  background:url('assets/lilly.jpg') no-repeat center center / cover;
+  filter:blur(6px) brightness(0.5);transform:scale(1.08);z-index:-1;
+}
 
-        /* ===== FIXED CAROUSEL WITH PROPER IMAGE SIZING ===== */
-        .image-container {
-            flex-shrink:0;
-            width:clamp(200px,22vw,360px); 
-            height:clamp(460px,60vh,620px);
-            border-radius:clamp(16px,1.8vw,30px);
-            border:clamp(4px,0.5vw,8px) solid rgba(255,255,255,0.85);
-            overflow:hidden; 
-            box-shadow:0 24px 60px rgba(0,0,0,0.45);
-            position:relative; 
-            opacity:0; 
-            transform:translateY(40px);
-            transition:opacity 1s ease,transform 1s ease;
-        }
-        .image-container.show { opacity:1; transform:translateY(0); }
-        
-        .carousel-track {
-            display:flex;
-            width:100%;
-            height:100%;
-            transition:transform 0.5s ease-in-out;
-        }
-        
-        .carousel-slide {
-            min-width:100%;
-            height:100%;
-            flex-shrink:0;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            overflow:hidden;
-            background:rgba(0,0,0,0.15);
-        }
-        
-        .carousel-slide img {
-            width:100%;
-            height:100%;
-            object-fit:cover;
-            display:block;
-            object-position:center center;
-        }
+/* ── nav back ── */
+.nav-back{
+  position:fixed;top:clamp(12px,2vh,20px);left:clamp(12px,2vw,22px);z-index:300;
+  background:rgba(255,240,248,0.18);backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,200,220,0.4);color:#f5dce8;font-size:1.3rem;
+  width:44px;height:44px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:background .25s,transform .2s;text-decoration:none;
+}
+.nav-back:hover{background:rgba(255,200,220,0.35);transform:scale(1.08);}
 
-        /* Carousel navigation */
-        .carousel-btn {
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            z-index:15;
-            background:rgba(255,255,255,0.25);
-            backdrop-filter:blur(8px);
-            border:1px solid rgba(255,255,255,0.3);
-            color:#f5dce8;
-            width:36px;
-            height:36px;
-            border-radius:50%;
-            cursor:pointer;
-            font-size:1.2rem;
-            transition:all 0.3s;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        }
-        .carousel-btn:hover {
-            background:rgba(255,255,255,0.4);
-            transform:translateY(-50%) scale(1.1);
-        }
-        .carousel-btn.prev { left:10px; }
-        .carousel-btn.next { right:10px; }
+/* ── top label ── */
+.subtitle{
+  position:fixed;top:clamp(12px,2.5vh,24px);left:50%;transform:translateX(-50%);
+  color:#f5dce8;font-size:clamp(0.9rem,1.8vw,1.4rem);font-style:italic;letter-spacing:3px;
+  text-shadow:0 2px 16px rgba(0,0,0,0.6);white-space:nowrap;z-index:10;
+  animation:softPulse 3s infinite ease-in-out;
+}
+@keyframes softPulse{
+  0%,100%{opacity:.75;transform:translateX(-50%) scale(1)}
+  50%{opacity:1;transform:translateX(-50%) scale(1.02)}
+}
 
-        /* Dots */
-        .carousel-dots {
-            position:absolute;
-            bottom:80px;
-            left:50%;
-            transform:translateX(-50%);
-            display:flex;
-            gap:8px;
-            z-index:15;
-        }
-        .carousel-dots .dot {
-            width:8px;
-            height:8px;
-            border-radius:50%;
-            background:rgba(255,255,255,0.4);
-            cursor:pointer;
-            transition:all 0.3s;
-        }
-        .carousel-dots .dot.active {
-            background:#f5dce8;
-            transform:scale(1.3);
-        }
-        .carousel-dots .dot:hover {
-            background:rgba(255,255,255,0.7);
-        }
+/* ── main stage ── */
+.stage{
+  width:100%;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(20px,3.5vw,52px);
+  padding:clamp(60px,8vh,90px) clamp(16px,4vw,56px) clamp(30px,5vh,56px);
+}
 
-        .bouquet-btn {
-            position:absolute; bottom:clamp(36px,5vh,56px); left:50%; transform:translateX(-50%);
-            z-index:20; padding:clamp(8px,1vh,12px) clamp(18px,2vw,28px);
-            background:linear-gradient(135deg,#d4849a,#b86070);
-            color:#fff; border:none; border-radius:50px;
-            font-family:'Playfair Display',serif; font-size:clamp(0.7rem,1vw,0.9rem);
-            letter-spacing:1.5px; cursor:pointer;
-            box-shadow:0 6px 20px rgba(180,80,100,0.45);
-            opacity:0; transition:opacity .6s ease 1.6s,transform .2s; white-space:nowrap;
-        }
-        .bouquet-btn:hover { transform:translateX(-50%) scale(1.08); }
-        .image-container.show .bouquet-btn { opacity:1; }
+/* ── image card ── */
+.image-container{
+  flex-shrink:0;
+  width:clamp(220px,24vw,380px);
+  height:clamp(520px,75vh,760px);
+  border-radius:clamp(14px,1.6vw,26px);
+  border:clamp(3px,0.45vw,7px) solid rgba(255,255,255,0.88);
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  position:relative;
+  opacity:0;transform:translateY(40px);
+  transition:opacity 1s ease,transform 1s ease;
+}
+.image-container.show{opacity:1;transform:translateY(0);}
 
-        /* ===== BUNNY AESTHETIC ===== */
-        .bunny-ears-overlay {
-            position:absolute;
-            top:-30px;
-            left:50%;
-            transform:translateX(-50%);
-            display:flex;
-            gap:14px;
-            z-index:25;
-            pointer-events:none;
-        }
-        .bunny-ear {
-            width:14px;
-            height:35px;
-            background:rgba(255,200,220,0.6);
-            border-radius:50% 50% 0 0;
-            border:1.5px solid rgba(255,200,220,0.3);
-            animation:earWiggle 3s ease-in-out infinite;
-            transform-origin:bottom;
-        }
-        .bunny-ear:nth-child(2) { animation-delay:0.5s; }
-        @keyframes earWiggle {
-            0%,100% { transform:rotate(0deg); }
-            50% { transform:rotate(12deg); }
-        }
+/* ── CAROUSEL FIX: track = flex row, each slide = 100% of container width ── */
+.carousel-track{
+  display:flex;
+  /* width set by JS: slides.length * 100% */
+  height:100%;
+  transition:transform 0.5s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.carousel-slide{
+  /* width set by JS: 100% / slides.length */
+  height:100%;
+  flex-shrink:0;
+  overflow:hidden;
+  background:#1a0a10;
+}
+.carousel-slide img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;
+}
 
-        .bunny-floating {
-            position:absolute;
-            font-size:50px;
-            animation:floatBunny 4s ease-in-out infinite;
-            pointer-events:none;
-            opacity:1;
-            z-index:10;
-        }
-        @keyframes floatBunny {
-            0%,100% { transform:translateY(0px) rotate(0deg); }
-            50% { transform:translateY(-8px) rotate(8deg); }
-        }
-        .bunny-f1 { top:10px; left:5px; animation-delay:0s; }
-        .bunny-f2 { top:10px; right:5px; animation-delay:1s; }
-        .bunny-f3 { bottom:70px; left:5px; animation-delay:2s; }
-        .bunny-f4 { bottom:70px; right:5px; animation-delay:3s; }
+/* ── carousel controls ── */
+.carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:15;
+  background:rgba(255,255,255,0.22);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.3);color:#f5dce8;
+  width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,transform .2s;
+}
+.carousel-btn:hover{background:rgba(255,200,220,0.45);transform:translateY(-50%) scale(1.1);}
+.carousel-btn.prev{left:8px;}
+.carousel-btn.next{right:8px;}
 
-        /* Bunny corner decorations */
-        .bunny-corner {
-            position:absolute;
-            width:20px;
-            height:18px;
-            background:rgba(255,200,220,0.2);
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:10px;
-            border:1px solid rgba(255,200,220,0.15);
-            pointer-events:none;
-            z-index:8;
-        }
-        .bunny-corner::before { content:'🐰'; }
-        .bunny-corner.tl { top:5px; left:5px; }
-        .bunny-corner.tr { top:5px; right:5px; }
-        .bunny-corner.bl { bottom:70px; left:5px; }
-        .bunny-corner.br { bottom:70px; right:5px; }
+.carousel-dots{
+  position:absolute;bottom:74px;left:50%;transform:translateX(-50%);
+  display:flex;gap:7px;z-index:15;
+}
+.carousel-dots .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,0.38);cursor:pointer;
+  transition:all .3s;
+}
+.carousel-dots .dot.active{background:#f5dce8;transform:scale(1.35);}
 
-        /* Bunny border glow */
-        .bunny-glow {
-            position:absolute;
-            inset:-6px;
-            border-radius:clamp(20px,2vw,34px);
-            border:2px solid rgba(255,200,220,0.2);
-            pointer-events:none;
-            z-index:5;
-            box-shadow:0 0 30px rgba(255,180,200,0.1);
-        }
+/* slide counter badge */
+.slide-counter{
+  position:absolute;top:12px;right:14px;z-index:15;
+  font-size:0.62rem;color:rgba(255,255,255,0.75);
+  background:rgba(0,0,0,0.38);backdrop-filter:blur(6px);
+  border-radius:20px;padding:3px 9px;letter-spacing:.5px;
+}
 
-        /* ===== MUSIC CARD WITH BUNNY FRAME ===== */
-        .music-card {
-            background:rgba(255,255,255,0.18); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
-            padding:clamp(20px,2.5vh,36px) clamp(20px,2.5vw,36px);
-            border-radius:clamp(20px,2vw,40px); box-shadow:0 15px 40px rgba(0,0,0,0.2);
-            width:clamp(260px,28vw,420px); text-align:center;
-            border:1px solid rgba(255,255,255,0.3);
-            max-height:clamp(160px,18vh,160px); overflow:hidden;
-            opacity:0; transform:translateY(40px);
-            transition:opacity 1s ease .3s,transform 1s ease .3s,max-height .6s ease,background .3s;
-            position:relative;
-            overflow: visible !important;
-        }
-        .music-card.show { opacity:1; transform:translateY(0); }
-        .music-card:hover { max-height:700px; background:rgba(255,255,255,0.28); }
+/* ── bouquet button (over photo) ── */
+.bouquet-btn{
+  position:absolute;bottom:clamp(28px,4vh,48px);left:50%;transform:translateX(-50%);
+  z-index:20;padding:clamp(7px,1vh,11px) clamp(16px,2vw,26px);
+  background:linear-gradient(135deg,#d4849a,#b86070);
+  color:#fff;border:none;border-radius:50px;
+  font-family:'Playfair Display',serif;font-size:clamp(0.65rem,1vw,0.85rem);
+  letter-spacing:1.5px;cursor:pointer;white-space:nowrap;
+  box-shadow:0 6px 20px rgba(180,80,100,0.5);
+  opacity:0;transition:opacity .6s ease 1.6s,transform .2s;
+}
+.bouquet-btn:hover{transform:translateX(-50%) scale(1.08);}
+.image-container.show .bouquet-btn{opacity:1;}
 
-        /* ===== BUNNY FRAME IMAGES ON MUSIC CARD ===== */
-        .music-card-bunny-frame {
-            position:absolute;
-            top:-25px;
-            left:-25px;
-            right:-25px;
-            bottom:-25px;
-            pointer-events:none;
-            z-index:0;
-        }
+/* ── music card ── */
+.music-card{
+  background:rgba(255,240,248,0.18);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  padding:clamp(18px,2.5vh,32px) clamp(18px,2.5vw,32px);
+  border-radius:clamp(18px,2vw,36px);
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  width:clamp(240px,28vw,400px);text-align:center;
+  border:1px solid rgba(255,200,220,0.38);
+  max-height:clamp(150px,17vh,155px);overflow:hidden;
+  opacity:0;transform:translateY(40px);
+  transition:opacity 1s ease .3s,transform 1s ease .3s,max-height .7s cubic-bezier(.4,0,.2,1),background .3s;
+}
+.music-card.show{opacity:1;transform:translateY(0);}
+.music-card:hover{max-height:700px;background:rgba(255,240,248,0.28);}
 
-        .bunny-frame-img {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid rgba(255,200,220,0.4);
-            box-shadow: 0 4px 15px rgba(255,180,200,0.2);
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            z-index: 20; /* Higher z-index to stay on top */
-            pointer-events: auto; /* Allow clicking/hovering */
-        }
+.music-card h3{
+  color:#f5dce8;margin-bottom:clamp(10px,1.6vh,18px);
+  font-size:clamp(0.8rem,1.2vw,1.1rem);letter-spacing:1px;
+}
+.controls{display:flex;justify-content:center;gap:clamp(10px,1.4vw,20px);margin-bottom:clamp(8px,1.2vh,16px);}
+.control-btn{
+  background:linear-gradient(135deg,#d4849a,#b86070);border:none;
+  width:clamp(36px,4vw,50px);height:clamp(36px,4vw,50px);border-radius:50%;
+  color:#fff;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 5px 14px rgba(180,96,112,0.4);font-size:clamp(0.75rem,1vw,1rem);
+}
+.control-btn:hover{transform:scale(1.12);}
 
-        .bunny-frame-img:hover {
-            transform: scale(1.15) rotate(5deg);
-        }
+.expand-content{opacity:0;transition:opacity .4s ease;pointer-events:none;}
+.music-card:hover .expand-content{opacity:1;pointer-events:auto;}
 
+.slider-box{margin:clamp(8px,1.3vh,16px) 0;}
+input[type=range]{accent-color:#d4849a;cursor:pointer;height:4px;width:100%;}
+label{color:#f5dce8;font-size:clamp(0.65rem,0.85vw,0.8rem);}
+.time-row{display:flex;justify-content:space-between;font-size:clamp(0.7rem,0.95vw,0.9rem);color:#f5dce8;margin-bottom:4px;width:100%;align-items:center;}
+.time-row input{flex:1;margin:0 8px;}
+.vol-row{display:flex;flex-direction:row;align-items:center;gap:8px;}
+.vol-row span{color:#f5dce8;font-size:1rem;}
 
-        .bunny-frame-img.tl {
-            top:-15px;
-            left:-15px;
-        }
-        .bunny-frame-img.tr {
-            top:-15px;
-            right:-15px;
-        }
-        .bunny-frame-img.bl {
-            bottom:-15px;
-            left:-15px;
-        }
-        .bunny-frame-img.br {
-            bottom:-15px;
-            right:-15px;
-        }
+.romantic-text{
+  font-style:italic;color:rgba(255,240,248,0.9);line-height:1.7;
+  margin-top:clamp(12px,1.8vh,20px);font-size:clamp(0.72rem,0.9vw,0.9rem);
+  padding-top:clamp(10px,1.3vh,16px);border-top:1px solid rgba(255,200,220,0.3);font-weight:500;
+}
 
-        /* Add bunny images at top corners of music card */
-        .bunny-frame-img.top-left {
-            top: -30px;  /* Moves it above the card */
-            left: -30px; /* Moves it to the left of the card */
-            width: 70px;
-            height: 70px;
-        }
+/* floating heart particles */
+.particle{position:fixed;top:0;left:0;pointer-events:none;z-index:50;font-size:clamp(16px,2vw,24px);will-change:transform,opacity;}
 
-        /* Position on top-right of music card - FULLY OUTSIDE */
-        .bunny-frame-img.top-right {
-            top: -30px;
-            right: -30px;
-            width: 70px;
-            height: 70px;
-        }
-
-        /* Optional: Add bottom corners too */
-        .bunny-frame-img.bottom-left {
-            bottom: -30px;
-            left: -30px;
-            width: 60px;
-            height: 60px;
-        }
-
-        .bunny-frame-img.bottom-right {
-            bottom: -30px;
-            right: -30px;
-            width: 60px;
-            height: 60px;
-        }
-        /* Music card content */
-        .music-card-content {
-            position:relative;
-            z-index:1;
-        }
-
-        .music-card h3 {
-            color:#f5dce8; margin-bottom:clamp(12px,1.8vh,22px);
-            font-size:clamp(0.85rem,1.2vw,1.2rem); letter-spacing:1px;
-        }
-
-        .controls { display:flex; justify-content:center; gap:clamp(12px,1.5vw,22px); margin-bottom:clamp(10px,1.5vh,20px); }
-
-        .control-btn {
-            background:linear-gradient(135deg,#d4849a,#b86070); border:none;
-            width:clamp(38px,4vw,54px); height:clamp(38px,4vw,54px);
-            border-radius:50%; color:#fff; cursor:pointer; transition:.3s;
-            display:flex; align-items:center; justify-content:center;
-            box-shadow:0 5px 16px rgba(180,96,112,0.35);
-            font-size:clamp(0.8rem,1.1vw,1.1rem);
-        }
-        .control-btn:hover { transform:scale(1.12); }
-
-        .expand-content { opacity:0; transition:opacity .4s ease; pointer-events:none; }
-        .music-card:hover .expand-content { opacity:1; pointer-events:auto; }
-
-        .slider-box { margin:clamp(10px,1.5vh,20px) 0; }
-        input[type=range] { accent-color:#d4849a; cursor:pointer; height:4px; }
-        label { color:#f5dce8; font-size:clamp(0.7rem,0.9vw,0.85rem); }
-
-        .time-row { display:flex; justify-content:space-between; font-size:clamp(0.75rem,1vw,1rem); color:#f5dce8; margin-bottom:5px; width:100%; align-items:center; }
-        .time-row input { flex:1; margin:0 8px; }
-        .vol-row { display:flex; flex-direction:row; align-items:center; gap:10px; }
-        .vol-row span { color:#f5dce8; }
-
-        .romantic-text {
-            font-style:italic; color:rgba(255,240,245,0.9); line-height:1.7;
-            margin-top:clamp(14px,2vh,24px); font-size:clamp(0.78rem,0.95vw,0.95rem);
-            padding-top:clamp(12px,1.5vh,20px); border-top:1px solid rgba(255,255,255,0.2); font-weight:500;
-        }
-
-        .particle { position:fixed; top:0; left:0; pointer-events:none; z-index:50; font-size:clamp(18px,2vw,26px); will-change:transform,opacity; }
-
-        @media(max-width:640px){
-            .stage{
-                flex-direction:column;
-                justify-content:flex-start;
-                align-items:center;
-                gap:18px;
-                min-height:100dvh;
-                height:auto;
-                padding:80px 16px 40px;
-            }
-            .image-container{
-                width:min(240px,70vw);
-                height:min(420px,75vh);
-            }
-            .music-card{
-                width:100%;
-                max-width:420px;
-            }
-            .bunny-frame-img.top-left,
-            .bunny-frame-img.top-right {
-                width:40px;
-                height:40px;
-                top:-15px;
-            }
-            .bunny-frame-img.top-left { left:-15px; }
-            .bunny-frame-img.top-right { right:-15px; }
-        }
-        @media(min-width:641px) and (max-width:900px){
-            .stage{ gap:clamp(14px,2.5vw,32px); padding:56px 14px 16px; }
-            .image-container{ width:clamp(160px,18vw,260px); height:clamp(340px,50vh,520px); }
-            .music-card{ width:clamp(200px,30vw,360px); }
-        }
-    </style>
+/* ── mobile ── */
+@media(max-width:640px){
+  .stage{
+    flex-direction:column;justify-content:flex-start;align-items:center;
+    gap:18px;min-height:100dvh;height:auto;padding:76px 14px 36px;
+  }
+ .image-container{width:min(260px,80vw);height:min(520px,85vh);}  
+ .music-card{width:100%;max-width:420px;}
+}
+@media(min-width:641px) and (max-width:900px){
+  .stage{gap:clamp(14px,2.5vw,32px);padding:56px 14px 16px;}
+  .image-container{width:clamp(160px,20vw,260px);height:clamp(320px,52vh,500px);}
+  .music-card{width:clamp(200px,30vw,360px);}
+}
+</style>
 </head>
 <body>
-    <a class="nav-back" href="index.html" id="backBtn">‹</a>
-    <p class="subtitle" id="mainText">A Moment of Pure Elegance 🐰</p>
 
-    <div class="stage" id="stage">
-        <div class="image-container" id="imgContainer">
-            <!-- Bunny decorations -->
-            <div class="bunny-ears-overlay">
-                <div class="bunny-ear"></div>
-                <div class="bunny-ear"></div>
-                <img src="Olivia/1.jpg" class="bunny-frame-img tl" alt="Bunny Frame Left">
-            </div>
-            <div class="bunny-corner tl"></div>
-            <div class="bunny-corner tr"></div>
-            <div class="bunny-corner bl"></div>
-            <div class="bunny-corner br"></div>
-            <div class="bunny-floating bunny-f1">🐰</div>
-            <div class="bunny-floating bunny-f2">🐰</div>
-            <div class="bunny-floating bunny-f3">🐰</div>
-            <div class="bunny-floating bunny-f4">🐰</div>
-            <div class="bunny-glow"></div>
+<a class="nav-back" href="index.html" id="backBtn">‹</a>
+<p class="subtitle" id="mainText">A Moment of Pure Elegance 🐰</p>
 
-            <!-- CAROUSEL -->
-            <div class="carousel-track" id="carouselInner">
-                <div class="carousel-slide"><img src="Olivia/Olivia.jpg" alt="Princess"></div>
-                <!-- Add more slides here -->
-            </div>
+<div class="stage" id="stage">
 
-            <button class="carousel-btn prev" id="prevBtn">‹</button>
-            <button class="carousel-btn next" id="nextBtn">›</button>
-            <button class="bouquet-btn" id="bouquetBtn">🌸 See Your Bouquet</button>
-            <div class="carousel-dots" id="carouselDots"></div>
-        </div>
+  <!-- IMAGE CAROUSEL -->
+  <div class="image-container" id="imgContainer">
 
-        <div class="music-card" id="musicCard">
-            <!-- BUNNY FRAME IMAGES ON TOP CORNERS -->
-            <img src="Olivia/1.jpg" class="bunny-frame-img top-left" alt="Bunny Frame Left">
-            <img src="Olivia/2.jpg" class="bunny-frame-img top-right" alt="Bunny Frame Right">
-            
-            <div class="music-card-content">
-                <!-- Mini bunny on music card -->
-                <div class="music-bunny">🐰</div>
-                <h3 id="songTitle">Music Ready</h3>
-                <div class="controls">
-                    <button class="control-btn" onclick="restartMusic()">↺</button>
-                    <button class="control-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
-                    <button class="control-btn" onclick="stopMusic()">■</button>
-                </div>
-                <div class="expand-content">
-                    <div class="slider-box">
-                        <label>Seek Time</label>
-                        <div class="time-row">
-                            <span id="currentTime">0:00</span>
-                            <input type="range" id="progressSlider" value="0" min="0" max="100">
-                            <span id="durationTime">0:00</span>
-                        </div>
-                    </div>
-                    <div class="slider-box vol-row">
-                        <span>🔈</span>
-                        <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" style="flex:1">
-                        <span>🔊</span>
-                    </div>
-                    <div class="romantic-text">
-                        In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry. 
-                        You have a way of bringing light into the people around you, 
-                        and the world is better with that light in it. Keep being you 
-                        you carry more goodness than you probably realize. 🐰
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="carousel-track" id="carouselInner">
+      <div class="carousel-slide"><img src="Olivia/Olivia.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka1.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka2.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka3.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka4.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka5.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka6.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka7.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka8.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka9.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka10.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka11.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka12.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka13.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka14.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka15.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka16.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka17.jpg" alt=""></div>
+      <div class="carousel-slide"><img src="Olivia/touka18.jpg" alt=""></div>
     </div>
 
-    <audio id="loveSong">
-        <source src="assets/i_was_all_over_her.mp3" type="audio/mpeg">
-    </audio>
+    <button class="carousel-btn prev" id="prevBtn">‹</button>
+    <button class="carousel-btn next" id="nextBtn">›</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="slide-counter" id="slideCounter">1 / 11</div>
 
-    <script>
-        // ═══════════ MUSIC PLAYER ═══════════
-        const song = document.getElementById('loveSong');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const progressSlider = document.getElementById('progressSlider');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const songTitle = document.getElementById('songTitle');
-        const mainText = document.getElementById('mainText');
-        const imgContainer = document.getElementById('imgContainer');
-        const musicCard = document.getElementById('musicCard');
-        const currentTime = document.getElementById('currentTime');
-        const durationTime = document.getElementById('durationTime');
-        const bouquetBtn = document.getElementById('bouquetBtn');
-        const backBtn = document.getElementById('backBtn');
-        const particles = ['🌸','🌹','💖','✨','🌷','🤍','🐰'];
+    <button class="bouquet-btn" id="bouquetBtn">🌸 See Your Bouquet</button>
+  </div>
 
-        // ═══════════ CAROUSEL ═══════════
-        const carouselInner = document.getElementById('carouselInner');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const dotsContainer = document.getElementById('carouselDots');
+  <!-- MUSIC CARD -->
+  <div class="music-card" id="musicCard">
+    <h3 id="songTitle">Now Playing ♪</h3>
 
-        const slides = carouselInner.querySelectorAll('.carousel-slide');
-        let currentIndex = 0;
+    <div class="controls">
+      <button class="control-btn" onclick="restartMusic()">↺</button>
+      <button class="control-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
+      <button class="control-btn" onclick="stopMusic()">■</button>
+    </div>
 
-        function createDots() {
-            dotsContainer.innerHTML = '';
-            slides.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                if (index === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => goToSlide(index));
-                dotsContainer.appendChild(dot);
-            });
-        }
+    <div class="expand-content">
+      <div class="slider-box">
+        <label>Seek</label>
+        <div class="time-row">
+          <span id="currentTime">0:00</span>
+          <input type="range" id="progressSlider" value="0" min="0" max="100">
+          <span id="durationTime">0:00</span>
+        </div>
+      </div>
+      <div class="slider-box vol-row">
+        <span>🔈</span>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" style="flex:1">
+        <span>🔊</span>
+      </div>
+      <div class="romantic-text">
+        In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry.
+        You have a way of bringing light into the people around you. keep being you baby 🌸
+      </div>
+    </div>
+  </div>
 
-        function updateDots() {
-            const dots = dotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentIndex);
-            });
-        }
+</div>
 
-        function goToSlide(index) {
-            currentIndex = index;
-            carouselInner.style.transform = `translateX(-${index * 100}%)`;
-            updateDots();
-        }
+<audio id="loveSong"><source src="assets/i_was_all_over_her.mp3" type="audio/mpeg"></audio>
 
-        function nextSlide() {
-            const nextIndex = (currentIndex + 1) % slides.length;
-            goToSlide(nextIndex);
-        }
+<script>
+const song         = document.getElementById('loveSong');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const progressSlider = document.getElementById('progressSlider');
+const volumeSlider = document.getElementById('volumeSlider');
+const songTitle    = document.getElementById('songTitle');
+const mainText     = document.getElementById('mainText');
+const imgContainer = document.getElementById('imgContainer');
+const musicCard    = document.getElementById('musicCard');
+const currentTime  = document.getElementById('currentTime');
+const durationTime = document.getElementById('durationTime');
+const bouquetBtn   = document.getElementById('bouquetBtn');
+const backBtn      = document.getElementById('backBtn');
+const particles    = ['🌸','🌹','💖','✨','🌷','🤍','🐰'];
 
-        function prevSlide() {
-            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-            goToSlide(prevIndex);
-        }
+// ═══════════ CAROUSEL ═══════════
+const track       = document.getElementById('carouselInner');
+const prevBtn     = document.getElementById('prevBtn');
+const nextBtn     = document.getElementById('nextBtn');
+const dotsWrap    = document.getElementById('carouselDots');
+const counter     = document.getElementById('slideCounter');
+const slides      = Array.from(track.querySelectorAll('.carousel-slide'));
+const N           = slides.length;
+let cur           = 0;
+let autoTimer     = null;
 
-        prevBtn.addEventListener('click', prevSlide);
-        nextBtn.addEventListener('click', nextSlide);
+// KEY FIX: make track N times wide, each slide 1/N of that
+track.style.width = (N * 100) + '%';
+slides.forEach(s => { s.style.width = (100 / N) + '%'; });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
+function updateCarousel(animate=true) {
+  if (!animate) track.style.transition = 'none';
+  // translateX moves by (cur / N * 100)% of the total track width
+  // which equals cur * (100/N)% per slide = cur * containerWidth
+  track.style.transform = `translateX(-${cur * (100 / N)}%)`;
+  if (!animate) requestAnimationFrame(() => { track.style.transition = ''; });
+  // dots
+  dotsWrap.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  // counter
+  counter.textContent = `${cur+1} / ${N}`;
+}
 
-        createDots();
+function goTo(index) {
+  cur = (index + N) % N;
+  updateCarousel();
+  resetAuto();
+}
 
-        // ═══════════ STATE MANAGEMENT ═══════════
-        function saveState() {
-            sessionStorage.setItem('mp_time',    song.currentTime);
-            sessionStorage.setItem('mp_playing', !song.paused);
-            sessionStorage.setItem('mp_volume',  song.volume);
-        }
+function makeDots() {
+  slides.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0?' active':'');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+}
 
-        bouquetBtn.addEventListener('click', () => { saveState(); window.location.href = 'bouquet.html'; });
-        backBtn.addEventListener('click', (e) => { e.preventDefault(); saveState(); window.location.href = 'index.html'; });
-        window.addEventListener('beforeunload', saveState);
-        window.addEventListener('pagehide', saveState);
+function resetAuto() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => goTo(cur + 1), 5000);
+}
 
-        function fmt(s) {
-            if (!s || isNaN(s)) return '0:00';
-            const m = Math.floor(s/60), sec = Math.floor(s%60);
-            return m + ':' + (sec<10?'0':'') + sec;
-        }
+prevBtn.addEventListener('click', () => goTo(cur - 1));
+nextBtn.addEventListener('click', () => goTo(cur + 1));
 
-        function togglePlay() {
-            if (song.paused) { song.play(); playPauseBtn.textContent='||'; }
-            else { song.pause(); playPauseBtn.textContent='▶'; }
-        }
+// swipe support
+let touchX = 0;
+track.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+track.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1));
+}, {passive:true});
 
-        function restartMusic() { song.currentTime=0; song.play(); playPauseBtn.textContent='||'; }
-        function stopMusic() { song.pause(); song.currentTime=0; playPauseBtn.textContent='▶'; }
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') goTo(cur+1);
+  if (e.key==='ArrowLeft')  goTo(cur-1);
+});
 
-        song.addEventListener('timeupdate', () => {
-            const pct = (song.currentTime / song.duration) * 100;
-            progressSlider.value = pct;
-            currentTime.textContent = fmt(song.currentTime);
-        });
+makeDots();
+resetAuto();
 
-        song.addEventListener('loadedmetadata', () => { durationTime.textContent = fmt(song.duration); });
+// ═══════════ SESSION STORAGE ═══════════
+function saveState() {
+  sessionStorage.setItem('mp_time',    song.currentTime || 0);
+  sessionStorage.setItem('mp_playing', (!song.paused).toString());
+  sessionStorage.setItem('mp_volume',  song.volume);
+}
+bouquetBtn?.addEventListener('click', () => { saveState(); window.location.href = 'bouquet.html'; });
+backBtn?.addEventListener('click', e => { e.preventDefault(); saveState(); window.location.href = 'index.html'; });
+window.addEventListener('beforeunload', saveState);
+window.addEventListener('pagehide', saveState);
 
-        progressSlider.addEventListener('input', () => {
-            song.currentTime = (progressSlider.value/100) * song.duration;
-        });
+// ═══════════ AUDIO ═══════════
+function fmt(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + (sec<10?'0':'') + sec;
+}
+function togglePlay() {
+  if (song.paused) { song.play().catch(()=>{}); playPauseBtn.textContent='||'; }
+  else             { song.pause(); playPauseBtn.textContent='▶'; }
+}
+function restartMusic() { song.currentTime=0; song.play().catch(()=>{}); playPauseBtn.textContent='||'; }
+function stopMusic()    { song.pause(); song.currentTime=0; playPauseBtn.textContent='▶'; }
 
-        volumeSlider.addEventListener('input', e => { song.volume = e.target.value; });
+song.addEventListener('loadedmetadata', () => { durationTime.textContent = fmt(song.duration); });
+song.addEventListener('timeupdate', () => {
+  if (!song.duration) return;
+  progressSlider.value = (song.currentTime / song.duration) * 100;
+  currentTime.textContent = fmt(song.currentTime);
+});
+song.addEventListener('ended', () => { playPauseBtn.textContent='▶'; });
+progressSlider.addEventListener('input', () => { song.currentTime = (progressSlider.value/100) * song.duration; });
+volumeSlider.addEventListener('input', e => { song.volume = e.target.value; });
 
-        function createParticle(x, y) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.textContent = particles[Math.floor(Math.random() * particles.length)];
-            document.body.appendChild(p);
-            p.style.left = x+'px'; p.style.top = y+'px';
-            p.style.transform = 'translate(-50%,-50%)';
-            const dx = (Math.random()-.5)*700, dy = (Math.random()-.5)*700;
-            p.animate([
-                {transform:'translate(-50%,-50%) scale(0)',opacity:1},
-                {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.5) rotate(720deg)`,opacity:0}
-            ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish = () => p.remove();
-        }
+// ═══════════ PARTICLES ═══════════
+function createParticle(x, y) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.textContent = particles[Math.floor(Math.random() * particles.length)];
+  document.body.appendChild(p);
+  p.style.left = x+'px'; p.style.top = y+'px'; p.style.transform = 'translate(-50%,-50%)';
+  const dx=(Math.random()-.5)*700, dy=(Math.random()-.5)*700;
+  p.animate([
+    {transform:'translate(-50%,-50%) scale(0)',opacity:1},
+    {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.5) rotate(720deg)`,opacity:0}
+  ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish = () => p.remove();
+}
 
-        // ═══════════ LOAD ═══════════
-        window.addEventListener('load', () => {
-            const savedTime = parseFloat(sessionStorage.getItem('mp_time') || '0');
-            const wasPlaying = sessionStorage.getItem('mp_playing') === 'true';
-            const savedVol = parseFloat(sessionStorage.getItem('mp_volume') || '1');
+// ═══════════ LOAD ═══════════
+window.addEventListener('load', () => {
+  const savedTime  = parseFloat(sessionStorage.getItem('mp_time')    || '0');
+  const savedVol   = parseFloat(sessionStorage.getItem('mp_volume')  || '1');
+  const wasPlaying = sessionStorage.getItem('mp_playing') === 'true';
 
-            imgContainer.classList.add('show');
-            musicCard.classList.add('show');
-            mainText.textContent = "Liv's World 🐰";
-            songTitle.textContent = "Now Playing: I Was All Over Her";
+  imgContainer.classList.add('show');
+  musicCard.classList.add('show');
+  mainText.textContent = "My love's World 🐰";
+  songTitle.textContent = "I Was All Over Her — Salvia Palth";
 
-            song.volume = savedVol;
-            volumeSlider.value = savedVol;
+  song.volume = savedVol;
+  volumeSlider.value = savedVol;
 
-            song.addEventListener('canplay', function onCanPlay() {
-                song.removeEventListener('canplay', onCanPlay);
-                if (savedTime > 0) song.currentTime = savedTime;
-                song.play().catch(()=>{});
-                playPauseBtn.textContent = '||';
-            }, {once:true});
+  song.addEventListener('canplay', function onReady() {
+    song.removeEventListener('canplay', onReady);
+    try {
+      if (savedTime > 0) song.currentTime = savedTime;
+      if (wasPlaying) { song.play().catch(()=>{}); playPauseBtn.textContent = '||'; }
+    } catch(e) {}
+  }, {once:true});
 
-            setTimeout(() => {
-                const rect = imgContainer.getBoundingClientRect();
-                const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-                for (let i=0;i<80;i++) setTimeout(()=>createParticle(cx,cy), i*6);
-            }, 600);
-        });
-    </script>
+  // always try to autoplay on reveal
+  setTimeout(() => {
+    song.play().then(() => { playPauseBtn.textContent = '||'; }).catch(() => {});
+  }, 400);
+
+  // particle burst
+  setTimeout(() => {
+    const r = imgContainer.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
+    for (let i=0;i<70;i++) setTimeout(() => createParticle(cx,cy), i*7);
+  }, 700);
+});
+</script>
 </body>
 </html>
