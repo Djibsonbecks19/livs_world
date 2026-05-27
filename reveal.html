@@ -22,37 +22,68 @@ body::after{
   z-index:-1;
 }
 
-/* ── nav ── */
+/* corner florals same as index/bouquet */
+.corner{
+  position:fixed;pointer-events:none;z-index:2;
+  width:clamp(80px,10vw,155px);height:clamp(80px,10vw,155px);opacity:.22;
+}
+.corner svg{width:100%;height:100%;}
+.corner.tl{top:0;left:0;}
+.corner.tr{top:0;right:0;transform:scaleX(-1);}
+.corner.bl{bottom:0;left:0;transform:scaleY(-1);}
+.corner.br{bottom:0;right:0;transform:scale(-1,-1);}
+
+/* falling petals */
+.petal{
+  position:fixed;pointer-events:none;z-index:1;
+  border-radius:50% 20% 50% 20%;
+  animation:petalFall linear infinite;opacity:0;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:0;}
+  5%{opacity:.4;}
+  95%{opacity:.2;}
+  100%{transform:translateY(110vh) rotate(520deg);opacity:0;}
+}
+
+/* nav */
 .nav-back{
   position:fixed;top:20px;left:20px;z-index:300;
-  background:rgba(255,240,248,0.15);backdrop-filter:blur(14px);
-  border:1px solid rgba(255,200,220,0.35);color:#f5dce8;font-size:1.2rem;
+  background:rgba(255,240,248,0.14);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,200,220,0.32);color:#f5dce8;font-size:1.2rem;
   width:42px;height:42px;border-radius:50%;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background .2s,transform .2s;text-decoration:none;
 }
 .nav-back:hover{background:rgba(255,200,220,0.3);transform:scale(1.08);}
 
-/* ── top label ── */
+/* top label */
 .subtitle{
   position:fixed;top:20px;left:50%;transform:translateX(-50%);
   font-family:'Cormorant Garamond',serif;font-style:italic;
   color:rgba(245,220,232,0.8);font-size:clamp(0.85rem,1.4vw,1.2rem);
   letter-spacing:0.2em;white-space:nowrap;z-index:10;
   text-shadow:0 2px 16px rgba(0,0,0,0.5);
+  background:rgba(10,6,16,0.38);backdrop-filter:blur(8px);
+  padding:4px 18px;border-radius:40px;
+  border:1px solid rgba(212,132,154,0.22);
   animation:fadeIn 1s ease both;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateX(-50%) translateY(-7px);}
+  to{opacity:1;transform:translateX(-50%) translateY(0);}
+}
 
-/* ── stage ── */
+/* stage */
 .stage{
   width:100%;min-height:100dvh;
   display:flex;align-items:center;justify-content:center;
   gap:clamp(24px,4vw,64px);
   padding:clamp(64px,9vh,100px) clamp(20px,5vw,80px) clamp(30px,5vh,60px);
+  position:relative;z-index:5;
 }
 
-/* ── image card ── */
+/* image card */
 .image-container{
   flex-shrink:0;
   width:clamp(220px,24vw,380px);
@@ -68,12 +99,11 @@ body::after{
 }
 .image-container.show{opacity:1;transform:translateY(0) scale(1);}
 
-/* ── carousel ── */
+/* carousel */
 .carousel-track{display:flex;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform;}
 .carousel-slide{height:100%;flex-shrink:0;overflow:hidden;background:#120810;}
 .carousel-slide img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
 
-/* carousel btns */
 .carousel-btn{
   position:absolute;top:50%;transform:translateY(-50%);z-index:15;
   background:rgba(10,4,14,0.45);backdrop-filter:blur(8px);
@@ -104,7 +134,7 @@ body::after{
   border-radius:20px;padding:3px 10px;letter-spacing:.6px;
 }
 
-/* ── bouquet btn ── */
+/* bouquet btn */
 .bouquet-btn{
   position:absolute;bottom:clamp(24px,4vh,44px);left:50%;transform:translateX(-50%);z-index:20;
   padding:clamp(8px,1.1vh,13px) clamp(18px,2.5vw,30px);
@@ -119,7 +149,7 @@ body::after{
 .bouquet-btn:hover{transform:translateX(-50%) scale(1.07);}
 .image-container.show .bouquet-btn{opacity:1;}
 
-/* ── right side: music + info ── */
+/* right side */
 .right-side{
   display:flex;flex-direction:column;
   gap:clamp(16px,2.5vh,28px);
@@ -129,7 +159,7 @@ body::after{
 }
 .right-side.show{opacity:1;transform:translateY(0);}
 
-/* song title area */
+/* song meta */
 .song-meta{
   text-align:center;
   padding:clamp(14px,2vh,22px) clamp(16px,2vw,24px);
@@ -150,9 +180,9 @@ body::after{
 }
 @keyframes blink{0%,100%{opacity:.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1)}}
 
-/* ── music card ── */
+/* music card */
 .music-card{
-  background:rgba(255,240,248,0.12);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  background:rgba(255,240,248,0.12);backdrop-filter:blur(22px);
   padding:clamp(16px,2.2vh,26px) clamp(18px,2.2vw,28px);
   border-radius:clamp(16px,2vw,28px);
   box-shadow:0 12px 40px rgba(0,0,0,0.2);
@@ -192,7 +222,36 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
   padding-top:clamp(10px,1.3vh,14px);border-top:1px solid rgba(255,200,220,0.2);
 }
 
-/* floating particles */
+/* little stat pills under song meta */
+.stat-row{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+  margin-top:10px;
+}
+.stat-pill{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,200,220,0.12);border:1px solid rgba(255,200,220,0.22);
+  border-radius:20px;padding:3px 10px;font-size:.6rem;
+  color:rgba(245,220,232,0.7);letter-spacing:.05em;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+}
+.stat-dot{width:5px;height:5px;border-radius:50%;background:#d4849a;animation:blink 1.4s ease-in-out infinite;}
+
+/* mood tags */
+.mood-row{
+  display:flex;gap:7px;flex-wrap:wrap;justify-content:center;
+  padding:clamp(10px,1.5vh,16px) clamp(14px,1.8vw,20px);
+  background:rgba(255,240,248,0.08);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,200,220,0.16);border-radius:clamp(14px,1.6vw,20px);
+}
+.mood-tag{
+  background:rgba(255,200,220,0.14);border:1px solid rgba(255,200,220,0.24);
+  border-radius:20px;padding:4px 12px;font-size:.62rem;color:rgba(245,220,232,0.75);
+  font-family:'Cormorant Garamond',serif;font-style:italic;letter-spacing:.06em;
+  transition:background .2s;cursor:default;
+}
+.mood-tag:hover{background:rgba(255,200,220,0.28);}
+
+/* particles */
 .particle{position:fixed;top:0;left:0;pointer-events:none;z-index:50;will-change:transform,opacity;font-size:clamp(14px,1.8vw,22px);}
 
 /* mobile */
@@ -211,12 +270,19 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
 </head>
 <body>
 
-<a class="nav-back" href="index.html" id="backBtn">‹</a>
-<p class="subtitle" style="text-align:center; margin-left:100px;" id="mainText">My love's World 🐰</p>
+<!-- corner florals -->
+<div class="corner tl"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/><path d="M5 130 Q30 90 55 70" stroke="#d4849a" stroke-width="1" fill="none" opacity=".5"/><circle cx="56" cy="69" r="5" fill="#d4849a" opacity=".5"/><path d="M0 100 Q20 70 40 55" stroke="#d4849a" stroke-width="0.8" fill="none" opacity=".35"/></svg></div>
+<div class="corner tr"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/><path d="M5 130 Q30 90 55 70" stroke="#d4849a" stroke-width="1" fill="none" opacity=".5"/><circle cx="56" cy="69" r="5" fill="#d4849a" opacity=".5"/></svg></div>
+<div class="corner bl"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/></svg></div>
+<div class="corner br"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/></svg></div>
+
+<a class="nav-back" href="index.html" id="backBtn">&#x2039;</a>
+
+<p class="subtitle" id="mainText">My love's World 🐰</p>
 
 <div class="stage">
 
-  <!-- IMAGE CAROUSEL -->
+  <!-- CAROUSEL -->
   <div class="image-container" id="imgContainer">
     <div class="carousel-track" id="carouselInner">
       <div class="carousel-slide"><img src="Olivia/Olivia.jpg" alt=""></div>
@@ -239,8 +305,8 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
       <div class="carousel-slide"><img src="Olivia/touka17.jpg" alt=""></div>
       <div class="carousel-slide"><img src="Olivia/touka18.jpg" alt=""></div>
     </div>
-    <button class="carousel-btn prev" id="prevBtn">‹</button>
-    <button class="carousel-btn next" id="nextBtn">›</button>
+    <button class="carousel-btn prev" id="prevBtn">&#x2039;</button>
+    <button class="carousel-btn next" id="nextBtn">&#x203a;</button>
     <div class="carousel-dots" id="carouselDots"></div>
     <div class="slide-counter" id="slideCounter">1 / 19</div>
     <button class="bouquet-btn" id="bouquetBtn">🌸 See Your Bouquet</button>
@@ -249,20 +315,22 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
   <!-- RIGHT SIDE -->
   <div class="right-side" id="rightSide">
 
-    <!-- song info -->
     <div class="song-meta">
       <div class="song-name"><span class="now-playing-dot"></span>I Was All Over Her</div>
       <div class="song-artist">Salvia Palth</div>
+      <div class="stat-row">
+        <div class="stat-pill"><span class="stat-dot"></span>Now Playing</div>
+        <div class="stat-pill">🌸 For You</div>
+        <div class="stat-pill">💖 Always</div>
+      </div>
     </div>
 
-    <!-- music player -->
     <div class="music-card" id="musicCard">
       <div class="controls">
-        <button class="control-btn" onclick="restartMusic()" title="Restart">↺</button>
-        <button class="control-btn play-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
-        <button class="control-btn" onclick="stopMusic()" title="Stop">■</button>
+        <button class="control-btn" onclick="restartMusic()" title="Restart">&#x21BA;</button>
+        <button class="control-btn play-btn" id="playPauseBtn" onclick="togglePlay()">&#x25B6;</button>
+        <button class="control-btn" onclick="stopMusic()" title="Stop">&#x25A0;</button>
       </div>
-
       <div class="expand-content">
         <div class="slider-box">
           <div class="time-row">
@@ -277,10 +345,20 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
           <span>🔊</span>
         </div>
         <div class="romantic-text">
-          In your eyes, I see strength and kindness. Every beat of this song reminds me of the grace you carry.
-          You bring light into everyone around you. keep being you my baby 🌸
+          In your eyes I see strength and kindness. Every beat of this song reminds me of the grace you carry.
+          You bring light into everyone around you. Keep being you my baby 🌸
         </div>
       </div>
+    </div>
+
+    <div class="mood-row">
+      <span class="mood-tag">🌷 soft</span>
+      <span class="mood-tag">🐰 gentle</span>
+      <span class="mood-tag">✨ radiant</span>
+      <span class="mood-tag">💖 cherished</span>
+      <span class="mood-tag">🌸 blooming</span>
+      <span class="mood-tag">🤍 tender</span>
+      <span class="mood-tag">🌙 dreamlike</span>
     </div>
 
   </div>
@@ -289,6 +367,17 @@ label{color:rgba(245,220,232,0.55);font-size:0.7rem;display:block;margin-bottom:
 <audio id="loveSong"><source src="assets/i_was_all_over_her.mp3" type="audio/mpeg"></audio>
 
 <script>
+// petals
+(function(){
+  const cols=['#e8a0b8','#d4849a','#f5c0d0','#ffaac8','#f0d0e0'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='petal';
+    const s=Math.random()*10+4;
+    p.style.cssText='width:'+s+'px;height:'+(s*1.7)+'px;background:'+cols[Math.floor(Math.random()*cols.length)]+';left:'+(Math.random()*100)+'%;top:-20px;animation-duration:'+(Math.random()*10+10)+'s;animation-delay:'+(Math.random()*14)+'s';
+    document.body.appendChild(p);
+  }
+})();
+
 const song=document.getElementById('loveSong');
 const playPauseBtn=document.getElementById('playPauseBtn');
 const progressSlider=document.getElementById('progressSlider');
@@ -301,7 +390,7 @@ const bouquetBtn=document.getElementById('bouquetBtn');
 const backBtn=document.getElementById('backBtn');
 const particles=['🌸','🌹','💖','✨','🌷','🤍','🐰'];
 
-// CAROUSEL
+// carousel
 const track=document.getElementById('carouselInner');
 const prevBtn=document.getElementById('prevBtn');
 const nextBtn=document.getElementById('nextBtn');
@@ -312,56 +401,54 @@ const N=slides.length;
 let cur=0,autoTimer=null;
 
 track.style.width=(N*100)+'%';
-slides.forEach(s=>{s.style.width=(100/N)+'%';});
+slides.forEach(function(s){s.style.width=(100/N)+'%';});
 
 function updateCarousel(){
-  track.style.transform=`translateX(-${cur*(100/N)}%)`;
-  dotsWrap.querySelectorAll('.dot').forEach((d,i)=>{
-    d.classList.toggle('active',i===cur);
-  });
-  counter.textContent=`${cur+1} / ${N}`;
+  track.style.transform='translateX(-'+(cur*(100/N))+'%)';
+  dotsWrap.querySelectorAll('.dot').forEach(function(d,i){d.classList.toggle('active',i===cur);});
+  counter.textContent=(cur+1)+' / '+N;
 }
 function goTo(i){cur=(i+N)%N;updateCarousel();resetAuto();}
 function makeDots(){
-  slides.forEach((_,i)=>{
+  slides.forEach(function(_,i){
     const d=document.createElement('div');
     d.className='dot'+(i===0?' active':'');
-    d.addEventListener('click',()=>goTo(i));
+    d.addEventListener('click',function(){goTo(i);});
     dotsWrap.appendChild(d);
   });
 }
-function resetAuto(){clearInterval(autoTimer);autoTimer=setInterval(()=>goTo(cur+1),5500);}
-prevBtn.addEventListener('click',()=>goTo(cur-1));
-nextBtn.addEventListener('click',()=>goTo(cur+1));
+function resetAuto(){clearInterval(autoTimer);autoTimer=setInterval(function(){goTo(cur+1);},5500);}
+prevBtn.addEventListener('click',function(){goTo(cur-1);});
+nextBtn.addEventListener('click',function(){goTo(cur+1);});
 let tx=0;
-track.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
-track.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)goTo(cur+(dx<0?1:-1));},{passive:true});
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')goTo(cur+1);if(e.key==='ArrowLeft')goTo(cur-1);});
+track.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+track.addEventListener('touchend',function(e){const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)goTo(cur+(dx<0?1:-1));},{passive:true});
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')goTo(cur+1);if(e.key==='ArrowLeft')goTo(cur-1);});
 makeDots();resetAuto();
 
-// SESSION
+// session state
 function saveState(){
   sessionStorage.setItem('mp_time',song.currentTime||0);
   sessionStorage.setItem('mp_playing',(!song.paused).toString());
   sessionStorage.setItem('mp_volume',song.volume);
 }
-bouquetBtn.addEventListener('click',()=>{saveState();window.location.href='bouquet.html';});
-backBtn.addEventListener('click',e=>{e.preventDefault();saveState();window.location.href='index.html';});
+bouquetBtn.addEventListener('click',function(){saveState();window.location.href='bouquet.html';});
+backBtn.addEventListener('click',function(e){e.preventDefault();saveState();window.location.href='index.html';});
 window.addEventListener('beforeunload',saveState);
 window.addEventListener('pagehide',saveState);
 
-// AUDIO
+// audio
 function fmt(s){if(!s||isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
-function togglePlay(){if(song.paused){song.play().catch(()=>{});playPauseBtn.textContent='||';}else{song.pause();playPauseBtn.textContent='▶';}}
-function restartMusic(){song.currentTime=0;song.play().catch(()=>{});playPauseBtn.textContent='||';}
-function stopMusic(){song.pause();song.currentTime=0;playPauseBtn.textContent='▶';}
-song.addEventListener('loadedmetadata',()=>{durationTimeEl.textContent=fmt(song.duration);});
-song.addEventListener('timeupdate',()=>{if(!song.duration)return;progressSlider.value=(song.currentTime/song.duration)*100;currentTimeEl.textContent=fmt(song.currentTime);});
-song.addEventListener('ended',()=>{playPauseBtn.textContent='▶';});
-progressSlider.addEventListener('input',()=>{song.currentTime=(progressSlider.value/100)*song.duration;});
-volumeSlider.addEventListener('input',e=>{song.volume=e.target.value;});
+function togglePlay(){if(song.paused){song.play().catch(function(){});playPauseBtn.innerHTML='&#x2016;';}else{song.pause();playPauseBtn.innerHTML='&#x25B6;';}}
+function restartMusic(){song.currentTime=0;song.play().catch(function(){});playPauseBtn.innerHTML='&#x2016;';}
+function stopMusic(){song.pause();song.currentTime=0;playPauseBtn.innerHTML='&#x25B6;';}
+song.addEventListener('loadedmetadata',function(){durationTimeEl.textContent=fmt(song.duration);});
+song.addEventListener('timeupdate',function(){if(!song.duration)return;progressSlider.value=(song.currentTime/song.duration)*100;currentTimeEl.textContent=fmt(song.currentTime);});
+song.addEventListener('ended',function(){playPauseBtn.innerHTML='&#x25B6;';});
+progressSlider.addEventListener('input',function(){song.currentTime=(progressSlider.value/100)*song.duration;});
+volumeSlider.addEventListener('input',function(e){song.volume=e.target.value;});
 
-// PARTICLES
+// particles
 function createParticle(x,y){
   const p=document.createElement('div');p.className='particle';
   p.textContent=particles[Math.floor(Math.random()*particles.length)];
@@ -370,12 +457,12 @@ function createParticle(x,y){
   const dx=(Math.random()-.5)*700,dy=(Math.random()-.5)*700;
   p.animate([
     {transform:'translate(-50%,-50%) scale(0)',opacity:1},
-    {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1.4) rotate(720deg)`,opacity:0}
-  ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish=()=>p.remove();
+    {transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(1.4) rotate(720deg)',opacity:0}
+  ],{duration:3000,easing:'cubic-bezier(0.1,0.9,0.2,1)'}).onfinish=function(){p.remove();};
 }
 
-// LOAD
-window.addEventListener('load',()=>{
+// load
+window.addEventListener('load',function(){
   const savedTime=parseFloat(sessionStorage.getItem('mp_time')||'0');
   const savedVol=parseFloat(sessionStorage.getItem('mp_volume')||'1');
   const wasPlaying=sessionStorage.getItem('mp_playing')==='true';
@@ -384,13 +471,13 @@ window.addEventListener('load',()=>{
   song.volume=savedVol;volumeSlider.value=savedVol;
   song.addEventListener('canplay',function onR(){
     song.removeEventListener('canplay',onR);
-    try{if(savedTime>0)song.currentTime=savedTime;if(wasPlaying){song.play().catch(()=>{});playPauseBtn.textContent='||';}}catch(e){}
+    try{if(savedTime>0)song.currentTime=savedTime;if(wasPlaying){song.play().catch(function(){});playPauseBtn.innerHTML='&#x2016;';}}catch(e){}
   },{once:true});
-  setTimeout(()=>{song.play().then(()=>{playPauseBtn.textContent='||';}).catch(()=>{});},400);
-  setTimeout(()=>{
+  setTimeout(function(){song.play().then(function(){playPauseBtn.innerHTML='&#x2016;';}).catch(function(){});},400);
+  setTimeout(function(){
     const r=imgContainer.getBoundingClientRect();
     const cx=r.left+r.width/2,cy=r.top+r.height/2;
-    for(let i=0;i<70;i++)setTimeout(()=>createParticle(cx,cy),i*7);
+    for(let i=0;i<70;i++)setTimeout(function(){createParticle(cx,cy);},i*7);
   },700);
 });
 </script>
