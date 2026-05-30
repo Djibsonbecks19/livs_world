@@ -14,26 +14,16 @@
   --purple:#b57bee;--glow:rgba(212,132,154,0.35);
 }
 html,body{width:100%;height:100%;font-family:'Playfair Display',serif;background:var(--dark);overflow:hidden;}
-
-/* ── BG ── */
 body::before{content:"";position:fixed;inset:0;background:url('assets/lilly.jpg') no-repeat center/cover;filter:blur(8px) brightness(0.38) saturate(1.2);transform:scale(1.1);z-index:0;}
 body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 25%,rgba(10,4,14,0.72)100%);z-index:0;}
-
-/* ── PETALS ── */
 .petal{position:fixed;pointer-events:none;z-index:1;border-radius:50% 20% 50% 20%;animation:petalFall linear infinite;opacity:0;}
 @keyframes petalFall{0%{transform:translateY(-20px) rotate(0deg);opacity:0}5%{opacity:.4}95%{opacity:.2}100%{transform:translateY(110vh) rotate(520deg);opacity:0}}
-
-/* ── CORNER DECO ── */
 .corner{position:fixed;pointer-events:none;z-index:2;width:clamp(80px,10vw,150px);height:clamp(80px,10vw,150px);opacity:.22;}
 .corner svg{width:100%;height:100%;}
 .corner.tl{top:0;left:0;}.corner.tr{top:0;right:0;transform:scaleX(-1);}
 .corner.bl{bottom:0;left:0;transform:scaleY(-1);}.corner.br{bottom:0;right:0;transform:scale(-1,-1);}
-
-/* ── NAV BACK ── */
 .nav-back{position:fixed;top:16px;left:16px;z-index:500;background:rgba(255,255,255,0.1);backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,0.2);color:var(--cream);font-size:1.3rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.35);transition:background .2s,transform .2s;}
 .nav-back:hover{background:rgba(255,255,255,0.22);transform:scale(1.08);}
-
-/* ── MINI PLAYER ── */
 #miniPlayer{position:fixed;top:16px;right:16px;z-index:500;opacity:0;transform:translateY(-10px);transition:opacity .6s ease .4s,transform .6s ease .4s;max-width:min(264px,calc(100vw - 32px));}
 #miniPlayer.show{opacity:1;transform:translateY(0);}
 #mpInner{background:rgba(20,14,26,0.88);backdrop-filter:blur(20px);border:1px solid rgba(212,132,154,0.32);border-radius:16px;padding:10px 13px;box-shadow:0 8px 32px rgba(0,0,0,0.6);}
@@ -64,46 +54,23 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .dot-pip{width:8px;height:8px;border-radius:50%;background:rgba(212,132,154,.4);}
 .dot-pip:nth-child(2){background:rgba(212,132,154,.65);}
 
-/* ── GARDEN WRAPPER ── */
+/* ── GARDEN ── */
 #garden{display:none;position:relative;z-index:10;width:100vw;height:100vh;overflow:hidden;}
 #garden.on{display:block;}
-
-/* title pill */
 #glabel{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.9rem,1.8vw,1.25rem);color:#fff;letter-spacing:.08em;background:rgba(10,6,16,.72);backdrop-filter:blur(10px);padding:5px 22px;border-radius:40px;border:1px solid rgba(212,132,154,.28);white-space:nowrap;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.5);opacity:0;transition:opacity 1s ease .3s;}
 #glabel.show{opacity:1;}
-
-/* ── SCROLL CONTAINER inside garden ── */
-#gardenScroll{
-  position:absolute;inset:0;
-  overflow-y:auto;overflow-x:hidden;
-  scroll-snap-type:y mandatory;
-  scrollbar-width:none;
-}
+#gardenScroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;scrollbar-width:none;}
 #gardenScroll::-webkit-scrollbar{display:none;}
+.g-section{scroll-snap-align:start;width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;}
 
-/* ── SECTION BASE ── */
-.g-section{
-  scroll-snap-align:start;
-  width:100%;min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;
-}
-
-/* ── SECTION 1: BOUQUET + CARDS ── */
-#sec1{
-  padding:72px 20px 32px;
-  gap:clamp(12px,2vw,24px);
-}
+/* ── SECTION 1 ── */
+#sec1{padding:72px 20px 32px;gap:clamp(12px,2vw,24px);}
 @media(min-width:700px){#sec1{flex-direction:row;align-items:stretch;padding:70px 24px 24px;}}
 @media(max-width:699px){#sec1{flex-direction:column;overflow-y:visible;height:auto;min-height:100vh;padding-top:60px;}}
-
-/* canvas */
 #canvas-wrap{position:relative;flex:1;min-width:0;}
 @media(min-width:700px){#canvas-wrap{height:calc(100vh - 94px);max-height:820px;}}
 @media(max-width:699px){#canvas-wrap{width:100%;height:52vmax;min-height:210px;flex-shrink:0;}}
 canvas{display:block;width:100%;height:100%;}
-
-/* bouquet bunnies overlay */
 .bouquet-bunnies{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:hidden;}
 .bunny-sprite{position:absolute;width:clamp(40px,5vw,64px);height:clamp(40px,5vw,64px);border-radius:50%;border:2px solid rgba(255,200,220,.3);object-fit:cover;opacity:.62;box-shadow:0 4px 16px rgba(255,180,200,.18);}
 .bunny-sprite:nth-child(1){top:10%;left:4%;animation:hopB 3.6s ease-in-out infinite 0s;}
@@ -111,19 +78,11 @@ canvas{display:block;width:100%;height:100%;}
 .bunny-sprite:nth-child(3){bottom:16%;left:6%;animation:hopB 3.6s ease-in-out infinite 1.6s;}
 .bunny-sprite:nth-child(4){bottom:20%;right:6%;animation:hopB 3.6s ease-in-out infinite 2.4s;}
 @keyframes hopB{0%,100%{transform:translateY(0) scale(1) rotate(0deg)}25%{transform:translateY(-10px) scale(1.05) rotate(-4deg)}75%{transform:translateY(-14px) scale(1.04) rotate(3deg)}}
-
-/* side column */
-.side-col{
-  display:flex;flex-direction:column;gap:clamp(14px,1.6vh,22px);
-  flex-shrink:0;overflow-y:auto;
-  scrollbar-width:thin;scrollbar-color:rgba(212,132,154,.4) transparent;
-}
+.side-col{display:flex;flex-direction:column;gap:clamp(14px,1.6vh,22px);flex-shrink:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(212,132,154,.4) transparent;}
 .side-col::-webkit-scrollbar{width:3px;}
 .side-col::-webkit-scrollbar-thumb{background:rgba(212,132,154,.4);border-radius:4px;}
 @media(min-width:700px){.side-col{width:clamp(280px,28vw,340px);height:calc(100vh - 94px);max-height:820px;justify-content:flex-start;padding-bottom:12px;}}
 @media(max-width:699px){.side-col{width:100%;padding-bottom:32px;}}
-
-/* again + letter row */
 .action-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
 #again{padding:8px 20px;font-size:.78rem;font-family:'Playfair Display',serif;color:var(--cream);background:rgba(255,255,255,.08);border:1.5px solid rgba(212,132,154,.4);border-radius:50px;cursor:pointer;opacity:0;transition:opacity .5s,background .2s;backdrop-filter:blur(10px);}
 #again:hover{background:rgba(255,255,255,.18);}
@@ -131,8 +90,6 @@ canvas{display:block;width:100%;height:100%;}
 #readLetterBtn:hover{transform:scale(1.05);}
 #readLetterBtn .badge-dot{width:9px;height:9px;border-radius:50%;background:#ff4455;border:2px solid #fff;animation:pulseDot 1.6s ease-in-out infinite;box-shadow:0 0 7px rgba(255,68,85,.5);}
 @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
-
-/* ── DISCORD CARD ── */
 .dc-card{border-radius:14px;overflow:visible;box-shadow:0 12px 40px rgba(0,0,0,.65);font-family:'Segoe UI',system-ui,sans-serif;flex-shrink:0;background:var(--card-bg);position:relative;opacity:0;transform:translateY(16px);transition:opacity .7s ease .8s,transform .7s ease .8s;}
 .dc-card.show{opacity:1;transform:translateY(0);}
 .dc-banner{width:100%;height:52px;background:linear-gradient(135deg,#c4b0e0,#a98fd4,#d4b8e8);position:relative;overflow:hidden;border-radius:14px 14px 0 0;}
@@ -170,8 +127,6 @@ canvas{display:block;width:100%;height:100%;}
 .dc-spot-art{width:30px;height:30px;border-radius:3px;object-fit:cover;flex-shrink:0;background:#3a3550;}
 .dc-spot-song{font-size:.6rem;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dc-spot-art2{font-size:.57rem;color:#1ed760;}
-
-/* bunny frame on cards */
 .bunny-frame{position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;pointer-events:none;border-radius:20px;border:1.5px solid rgba(255,200,220,.18);z-index:5;}
 .bunny-ears{position:absolute;top:-34px;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:6;}
 .bunny-ear{width:13px;height:33px;background:rgba(255,200,220,.42);border-radius:50% 50% 0 0;border:1.5px solid rgba(255,200,220,.18);animation:earWiggle 3s ease-in-out infinite;transform-origin:bottom;}
@@ -181,8 +136,6 @@ canvas{display:block;width:100%;height:100%;}
 @keyframes floatB{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(7deg)}}
 .fl-1{top:-11px;left:-9px;animation-delay:0s;}.fl-2{top:-11px;right:-9px;animation-delay:1s;}
 .fl-3{bottom:-11px;left:-9px;animation-delay:2s;}.fl-4{bottom:-11px;right:-9px;animation-delay:3s;}
-
-/* ── ROBLOX CARD ── */
 .rb-card{border-radius:14px;overflow:visible;box-shadow:0 12px 40px rgba(0,0,0,.65);font-family:'Segoe UI',system-ui,sans-serif;flex-shrink:0;background:var(--card-bg2);position:relative;opacity:0;transform:translateY(16px);transition:opacity .7s ease 1.1s,transform .7s ease 1.1s;}
 .rb-card.show{opacity:1;transform:translateY(0);}
 .rb-header{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:10px 12px 8px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);border-radius:14px 14px 0 0;}
@@ -220,70 +173,306 @@ canvas{display:block;width:100%;height:100%;}
 .rb-footer-txt{font-size:.55rem;color:#555;letter-spacing:.3px;}
 .rb-badge{font-size:.55rem;background:rgba(30,144,255,.18);color:#5ba8ff;border-radius:4px;padding:1px 5px;border:1px solid rgba(30,144,255,.28);}
 
-/* ── SECTION 2: LETTER / MESSAGE ── */
-#sec2{
-  flex-direction:column;
-  padding:80px 24px 48px;
-  gap:0;
-}
-.sec2-inner{
-  max-width:760px;
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:clamp(20px,3vh,36px);
-}
+/* ── SECTION 2: LETTER ── */
+#sec2{flex-direction:column;padding:80px 24px 48px;gap:0;}
+.sec2-inner{max-width:760px;width:100%;display:flex;flex-direction:column;align-items:center;gap:clamp(20px,3vh,36px);}
 .sec2-eyebrow{font-family:'Cormorant Garamond',serif;font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.35em;text-transform:uppercase;color:rgba(245,220,232,.45);}
 .sec2-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(2rem,5vw,4rem);color:var(--cream);letter-spacing:.04em;text-align:center;text-shadow:0 4px 40px rgba(212,132,154,.4);}
 .sec2-divider{width:clamp(50px,8vw,100px);height:1px;background:linear-gradient(90deg,transparent,rgba(212,132,154,.55),transparent);}
-
-/* letter card */
-.letter-card{
-  background:linear-gradient(135deg,#fff5f7,#ffe4ec);
-  border-radius:24px;
-  width:100%;
-  padding:clamp(24px,4vw,40px) clamp(22px,4vw,38px);
-  box-shadow:0 20px 60px rgba(255,150,180,.25),0 4px 16px rgba(0,0,0,.15);
-  border:1.5px solid rgba(255,200,220,.45);
-  position:relative;
-  overflow:hidden;
-}
+.letter-card{background:linear-gradient(135deg,#fff5f7,#ffe4ec);border-radius:24px;width:100%;padding:clamp(24px,4vw,40px) clamp(22px,4vw,38px);box-shadow:0 20px 60px rgba(255,150,180,.25),0 4px 16px rgba(0,0,0,.15);border:1.5px solid rgba(255,200,220,.45);position:relative;overflow:hidden;}
 .letter-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,200,220,.25);}
 .letter-card::after{content:'';position:absolute;bottom:-20px;left:-20px;width:90px;height:90px;border-radius:50%;background:rgba(255,180,200,.18);}
-
 .letter-header{display:flex;align-items:center;gap:clamp(14px,2vw,22px);margin-bottom:clamp(14px,2vh,22px);flex-wrap:wrap;}
 .letter-avatar{width:clamp(64px,8vw,88px);height:clamp(64px,8vw,88px);border-radius:50%;border:3px solid rgba(255,200,220,.55);object-fit:cover;box-shadow:0 4px 16px rgba(255,150,180,.22);flex-shrink:0;}
 .letter-from{display:flex;flex-direction:column;gap:3px;}
 .letter-to{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.72rem,.9vw,.82rem);color:#c4849a;letter-spacing:.1em;}
 .letter-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2vw,1.5rem);font-weight:400;color:#7a3050;letter-spacing:.04em;}
 .letter-sub{font-size:clamp(.62rem,.8vw,.72rem);color:#c4849a;font-style:italic;}
-
 .letter-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.95rem,1.4vw,1.12rem);color:#7a3050;line-height:1.8;position:relative;z-index:1;margin-bottom:clamp(14px,2vh,22px);}
 .letter-body p+p{margin-top:12px;}
-
 .letter-tags{display:flex;gap:7px;flex-wrap:wrap;position:relative;z-index:1;}
 .letter-tag{background:rgba(255,200,220,.35);padding:4px 12px;border-radius:20px;font-size:.68rem;color:#b86070;border:1px solid rgba(255,180,200,.3);}
-
-/* scroll hint */
-.scroll-hint{
-  position:absolute;
-  bottom:28px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  opacity:.5;animation:hintBob 2.4s ease-in-out infinite;
-  pointer-events:none;z-index:20;
-}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.5;animation:hintBob 2.4s ease-in-out infinite;pointer-events:none;z-index:20;}
 @keyframes hintBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 .hint-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;color:var(--cream);letter-spacing:.1em;}
 .hint-arrow{width:1px;height:24px;background:linear-gradient(to bottom,rgba(245,220,232,.5),transparent);}
-
-/* nav dots */
 #navDots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:100;display:none;flex-direction:column;gap:7px;}
 #navDots.on{display:flex;}
 .nav-dot{width:7px;height:7px;border-radius:50%;background:rgba(245,220,232,.3);border:1px solid rgba(245,220,232,.4);cursor:pointer;transition:background .3s,transform .3s;}
 .nav-dot.active{background:var(--rose);transform:scale(1.35);}
+
+/* ── SECTION 3: PROPOSAL ── */
+#sec3{
+  flex-direction:column;
+  padding:80px 24px 60px;
+  min-height:100vh;
+}
+.proposal-wrap{
+  max-width:680px;width:100%;
+  display:flex;flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+
+/* journey steps */
+.journey-step{
+  width:100%;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(18px,3vh,32px);
+  animation:stepIn .8s cubic-bezier(.22,1,.36,1) both;
+}
+.journey-step.active{display:flex;}
+@keyframes stepIn{0%{opacity:0;transform:translateY(28px)}100%{opacity:1;transform:translateY(0)}}
+
+.step-eyebrow{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.68rem,.9vw,.82rem);
+  letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(245,220,232,.45);
+  text-align:center;
+}
+.step-question{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(1.5rem,3.5vw,2.8rem);
+  color:var(--cream);
+  letter-spacing:.03em;line-height:1.25;
+  text-align:center;
+  text-shadow:0 4px 40px rgba(212,132,154,.35);
+}
+.step-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.85rem,1.2vw,1rem);
+  color:var(--cream-dim);
+  text-align:center;
+  line-height:1.65;
+  max-width:520px;
+}
+.step-divider{
+  width:clamp(50px,8vw,90px);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,132,154,.5),transparent);
+}
+
+/* answer choices */
+.choice-grid{
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;
+}
+.choice-btn{
+  padding:clamp(10px,1.5vh,16px) clamp(22px,3vw,36px);
+  background:rgba(255,255,255,.06);
+  color:var(--cream);
+  border:1.5px solid rgba(212,132,154,.35);
+  border-radius:60px;
+  cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.9rem,1.3vw,1.1rem);
+  letter-spacing:.1em;
+  backdrop-filter:blur(12px);
+  transition:background .25s,border-color .25s,transform .2s,box-shadow .25s;
+}
+.choice-btn:hover{
+  background:rgba(212,132,154,.22);
+  border-color:rgba(212,132,154,.9);
+  box-shadow:0 0 28px rgba(212,132,154,.28);
+  transform:translateY(-2px);
+}
+.choice-btn:active{transform:scale(.97);}
+.choice-btn.chosen{
+  background:rgba(212,132,154,.3);
+  border-color:rgba(212,132,154,1);
+  box-shadow:0 0 32px rgba(212,132,154,.4);
+}
+
+/* memory carousel */
+.memory-strip{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  width:100%;
+}
+.mem-pill{
+  padding:8px 16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(212,132,154,.25);
+  border-radius:40px;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.78rem,1vw,.9rem);
+  color:var(--cream-dim);
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.mem-pill.show{opacity:1;transform:translateY(0);}
+
+/* the big ask card */
+.ask-card{
+  background:linear-gradient(135deg,rgba(255,245,247,.07),rgba(255,228,236,.04));
+  border:1.5px solid rgba(212,132,154,.35);
+  border-radius:28px;
+  width:100%;
+  padding:clamp(28px,4vw,48px) clamp(24px,4vw,44px);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(18px);
+  box-shadow:0 0 80px rgba(212,132,154,.12),inset 0 0 60px rgba(255,200,220,.04);
+}
+.ask-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,132,154,.14),transparent 70%);
+}
+.ask-card::after{
+  content:'';position:absolute;bottom:-30px;left:-30px;
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(181,123,238,.12),transparent 70%);
+}
+.ask-avatar{
+  width:clamp(80px,10vw,110px);height:clamp(80px,10vw,110px);
+  border-radius:50%;
+  border:3px solid rgba(212,132,154,.5);
+  object-fit:cover;
+  margin:0 auto clamp(18px,2.5vh,28px);
+  display:block;
+  box-shadow:0 0 0 8px rgba(212,132,154,.1),0 8px 32px rgba(212,132,154,.25);
+  animation:avatarPulse 3s ease-in-out infinite;
+}
+@keyframes avatarPulse{
+  0%,100%{box-shadow:0 0 0 8px rgba(212,132,154,.1),0 8px 32px rgba(212,132,154,.25);}
+  50%{box-shadow:0 0 0 14px rgba(212,132,154,.08),0 8px 40px rgba(212,132,154,.38);}
+}
+.ask-pre{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:clamp(.75rem,1vw,.88rem);
+  letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(245,220,232,.45);
+  margin-bottom:clamp(10px,1.5vh,18px);
+  position:relative;z-index:1;
+}
+.ask-headline{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(1.9rem,4.5vw,4rem);
+  color:var(--cream);
+  letter-spacing:.03em;line-height:1.15;
+  text-shadow:0 4px 50px rgba(212,132,154,.5);
+  margin-bottom:clamp(14px,2vh,22px);
+  position:relative;z-index:1;
+}
+.ask-body{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.95rem,1.4vw,1.18rem);
+  color:rgba(245,220,232,.75);
+  line-height:1.85;
+  max-width:520px;
+  margin:0 auto clamp(22px,3vh,36px);
+  position:relative;z-index:1;
+}
+.ask-body strong{
+  color:var(--rose-light);
+  font-weight:400;
+}
+.ask-divider{
+  width:clamp(50px,8vw,90px);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,132,154,.55),transparent);
+  margin:0 auto clamp(22px,3vh,36px);
+  position:relative;z-index:1;
+}
+.ask-buttons{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.ask-yes{
+  padding:clamp(14px,2vh,20px) clamp(44px,6vw,80px);
+  background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+  color:#fff;
+  border:none;border-radius:60px;
+  cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(1.1rem,1.6vw,1.35rem);
+  letter-spacing:.15em;
+  box-shadow:0 6px 28px rgba(180,80,100,.5);
+  transition:transform .2s,box-shadow .2s;
+}
+.ask-yes:hover{transform:scale(1.06) translateY(-2px);box-shadow:0 10px 40px rgba(180,80,100,.65);}
+.ask-yes:active{transform:scale(.97);}
+.ask-no{
+  padding:clamp(12px,1.8vh,18px) clamp(30px,4vw,52px);
+  background:rgba(255,255,255,.06);
+  color:rgba(245,220,232,.55);
+  border:1.5px solid rgba(245,220,232,.2);
+  border-radius:60px;
+  cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.9rem,1.2vw,1.05rem);
+  letter-spacing:.12em;
+  transition:all .2s;
+  backdrop-filter:blur(10px);
+}
+.ask-no:hover{color:var(--cream-dim);border-color:rgba(245,220,232,.4);}
+
+/* response screens */
+.response-screen{
+  width:100%;
+  text-align:center;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(18px,2.5vh,28px);
+  animation:stepIn .8s cubic-bezier(.22,1,.36,1) both;
+}
+.response-screen.active{display:flex;}
+.resp-emoji{font-size:clamp(3rem,8vw,5.5rem);animation:emojiPop .6s cubic-bezier(.34,1.56,.64,1) both .1s;}
+@keyframes emojiPop{0%{transform:scale(0) rotate(-15deg)}100%{transform:scale(1) rotate(0deg)}}
+.resp-title{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(2rem,5vw,4rem);
+  color:var(--cream);
+  text-shadow:0 4px 40px rgba(212,132,154,.5);
+}
+.resp-body{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(.95rem,1.4vw,1.12rem);
+  color:var(--cream-dim);
+  line-height:1.85;
+  max-width:520px;
+}
+.resp-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.resp-tag{
+  padding:6px 16px;border-radius:30px;
+  font-size:.72rem;
+  background:rgba(255,200,220,.15);
+  color:var(--rose-light);
+  border:1px solid rgba(255,200,220,.25);
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+}
+/* confetti */
+.confetti-piece{
+  position:fixed;pointer-events:none;z-index:999;
+  width:8px;height:8px;border-radius:2px;
+  animation:confettiFall linear forwards;
+  opacity:0;
+}
+@keyframes confettiFall{
+  0%{transform:translateY(-10px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+/* mobile */
+@media(max-width:699px){
+  #navDots{display:none!important;}
+  .scroll-hint{display:none;}
+  #gardenScroll{scroll-snap-type:none;}
+}
 
 /* ── MODAL ── */
 #letterModal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
@@ -292,18 +481,10 @@ canvas{display:block;width:100%;height:100%;}
 @keyframes modalPop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
 .modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;color:var(--rose);cursor:pointer;transition:transform .2s;}
 .modal-close:hover{transform:rotate(90deg);}
-
-/* mobile tweaks */
-@media(max-width:699px){
-  #navDots{display:none!important;}
-  .scroll-hint{display:none;}
-  #gardenScroll{scroll-snap-type:none;}
-}
 </style>
 </head>
 <body>
 
-<!-- corner florals (same as index) -->
 <div class="corner tl"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/><path d="M5 130 Q30 90 55 70" stroke="#d4849a" stroke-width="1" fill="none" opacity=".5"/><circle cx="56" cy="69" r="5" fill="#d4849a" opacity=".5"/></svg></div>
 <div class="corner tr"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/><path d="M5 130 Q30 90 55 70" stroke="#d4849a" stroke-width="1" fill="none" opacity=".5"/></svg></div>
 <div class="corner bl"><svg viewBox="0 0 160 160" fill="none"><path d="M10 150 Q40 80 80 60 Q60 100 90 130" stroke="#d4849a" stroke-width="1.5" fill="none"/><circle cx="82" cy="58" r="8" fill="#d4849a" opacity=".7"/><circle cx="92" cy="50" r="5" fill="#e8a0b8" opacity=".6"/></svg></div>
@@ -311,7 +492,6 @@ canvas{display:block;width:100%;height:100%;}
 
 <a class="nav-back" href="reveal.html" id="navBack">‹</a>
 
-<!-- MINI PLAYER -->
 <div id="miniPlayer">
   <div id="mpInner">
     <div id="mpInfo"><span id="mpNote">♪</span><span id="mpTitle">I Was All Over Her</span></div>
@@ -325,13 +505,13 @@ canvas{display:block;width:100%;height:100%;}
   </div>
 </div>
 
-<!-- SECTION NAV DOTS -->
 <div id="navDots">
   <div class="nav-dot active" data-sec="0" onclick="scrollToSec(0)" title="Bouquet"></div>
   <div class="nav-dot" data-sec="1" onclick="scrollToSec(1)" title="Letter"></div>
+  <div class="nav-dot" data-sec="2" onclick="scrollToSec(2)" title="Ask"></div>
 </div>
 
-<!-- ══════════════ LANDING ══════════════ -->
+<!-- ══════ LANDING ══════ -->
 <div id="landingStage">
   <div class="land-eyebrow">a bouquet, just for you</div>
   <h1 class="hero-title">Your Lily Bouquet</h1>
@@ -341,13 +521,13 @@ canvas{display:block;width:100%;height:100%;}
   <div class="dot-row"><div class="dot-pip"></div><div class="dot-pip"></div><div class="dot-pip"></div></div>
 </div>
 
-<!-- ══════════════ GARDEN ══════════════ -->
+<!-- ══════ GARDEN ══════ -->
 <div id="garden">
   <div id="glabel">Your Lily Bouquet</div>
 
   <div id="gardenScroll">
 
-    <!-- SECTION 1: BOUQUET + CARDS -->
+    <!-- SECTION 1: BOUQUET -->
     <section class="g-section" id="sec1">
       <div id="canvas-wrap">
         <canvas id="c"></canvas>
@@ -358,10 +538,7 @@ canvas{display:block;width:100%;height:100%;}
           <img src="Olivia/5.jpg" class="bunny-sprite" alt="">
         </div>
       </div>
-
       <div class="side-col">
-
-        <!-- DISCORD -->
         <div class="dc-card" id="discordCard">
           <div class="bunny-frame">
             <div class="bunny-ears"><div class="bunny-ear"></div><div class="bunny-ear"></div></div>
@@ -403,8 +580,6 @@ canvas{display:block;width:100%;height:100%;}
             </div>
           </div>
         </div>
-
-        <!-- ROBLOX -->
         <div class="rb-card" id="robloxCard">
           <div class="bunny-frame">
             <div class="bunny-ears"><div class="bunny-ear"></div><div class="bunny-ear"></div></div>
@@ -447,16 +622,11 @@ canvas{display:block;width:100%;height:100%;}
             <span class="rb-badge" id="rbJoined">Joined –</span>
           </div>
         </div>
-
-        <!-- ACTION ROW -->
         <div class="action-row">
           <button id="again" onclick="rebloom()">↺ Bloom Again</button>
           <button id="readLetterBtn" onclick="openLetter()">💌 Read Letter <span class="badge-dot"></span></button>
         </div>
-
       </div>
-
-      <!-- scroll hint -->
       <div class="scroll-hint">
         <span class="hint-text">scroll down</span>
         <div class="hint-arrow"></div>
@@ -469,7 +639,6 @@ canvas{display:block;width:100%;height:100%;}
         <div class="sec2-eyebrow">from the heart</div>
         <h2 class="sec2-title">A Note For You</h2>
         <div class="sec2-divider"></div>
-
         <div class="letter-card">
           <div class="letter-header">
             <img src="Olivia/1.jpg" class="letter-avatar" alt="">
@@ -479,13 +648,11 @@ canvas{display:block;width:100%;height:100%;}
               <span class="letter-sub">To my pretty princess · May 2026</span>
             </div>
           </div>
-
           <div class="letter-body">
             <p>You could be the prettiest rose, and yet they chose lilies  and darling, that says nothing about you. It says everything about what they needed.</p>
-            <p>You are not a consolation. You are not second place. You are the bloom that made me stop and stare at, breath caught, wondering how i got so lucky.</p>
+            <p>You are not a consolation. You are not second place. You are the bloom that made me stop and stare, breath caught, wondering how I got so lucky.</p>
             <p>Keep dreaming. Keep glowing. Close your eyes and let yourself be soft  because the world needs your kind of tender. 🌸</p>
           </div>
-
           <div class="letter-tags">
             <span class="letter-tag">🌷 lilies</span>
             <span class="letter-tag">💖 you matter</span>
@@ -493,15 +660,150 @@ canvas{display:block;width:100%;height:100%;}
             <span class="letter-tag">✨ keep glowing</span>
           </div>
         </div>
-
         <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.78rem,1.1vw,.9rem);color:rgba(245,220,232,.4);letter-spacing:.1em;margin-top:4px;">with love, always 🌸</p>
+      </div>
+      <div class="scroll-hint">
+        <span class="hint-text">there's more</span>
+        <div class="hint-arrow"></div>
       </div>
     </section>
 
-  </div><!-- end gardenScroll -->
-</div><!-- end garden -->
+    <!-- SECTION 3: THE PROPOSAL JOURNEY -->
+    <section class="g-section" id="sec3">
+      <div class="proposal-wrap" id="proposalWrap">
 
-<!-- MODAL (quick read) -->
+        <!-- STEP 1: warm up question -->
+        <div class="journey-step active" id="step1">
+          <div class="step-eyebrow">just a question</div>
+          <div class="step-divider"></div>
+          <p class="step-question">When you close your eyes and think of somewhere you feel completely safe and at peace… where do you go?</p>
+          <p class="step-sub">There's no wrong answer. I'm just curious about your world.</p>
+          <div class="choice-grid">
+            <button class="choice-btn" onclick="nextStep(1,'somewhere quiet, just us')">somewhere quiet, just us 🌙</button>
+            <button class="choice-btn" onclick="nextStep(1,'somewhere with rain and soft music')">rain & soft music ☔</button>
+            <button class="choice-btn" onclick="nextStep(1,'somewhere I don\'t have to pretend')">somewhere I don't have to pretend 🤍</button>
+            <button class="choice-btn" onclick="nextStep(1,'somewhere you are')">somewhere you are 🌸</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: little memory question -->
+        <div class="journey-step" id="step2">
+          <div class="step-eyebrow">tell me something</div>
+          <div class="step-divider"></div>
+          <p class="step-question">What's one small moment with me you find yourself thinking about more than you expected?</p>
+          <p class="step-sub">The tiny things are the ones that stay.</p>
+          <div class="choice-grid">
+            <button class="choice-btn" onclick="nextStep(2,'the way you check on me')">the way you check on me 💬</button>
+            <button class="choice-btn" onclick="nextStep(2,'when we stayed up too late talking')">staying up too late talking 🌒</button>
+            <button class="choice-btn" onclick="nextStep(2,'the way you make me laugh')">the way you make me laugh 🫧</button>
+            <button class="choice-btn" onclick="nextStep(2,'how you always know what to say')">how you always know what to say 🩷</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: serious but soft question -->
+        <div class="journey-step" id="step3">
+          <div class="step-eyebrow">be honest with me</div>
+          <div class="step-divider"></div>
+          <p class="step-question">Do you ever get that feeling  quiet, warm, certain  like something just fits?</p>
+          <p class="step-sub">Like your chest gets a little lighter just from a name on your screen.</p>
+          <div class="choice-grid">
+            <button class="choice-btn" onclick="nextStep(3,'yes, more than I say out loud')">yes, more than I say out loud 🤍</button>
+            <button class="choice-btn" onclick="nextStep(3,'yes… honestly, all the time')">yes… honestly, all the time 🌸</button>
+            <button class="choice-btn" onclick="nextStep(3,'I think that\'s you')">I think that's you 💗</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: the soft build-up before the ask -->
+        <div class="journey-step" id="step4">
+          <div class="step-eyebrow">before i ask you something</div>
+          <div class="step-divider"></div>
+          <p class="step-question">I want you to know  you're the first thing I want to share good news with.</p>
+          <div class="memory-strip" id="memoryStrip">
+            <span class="mem-pill">the way you laugh 🌙</span>
+            <span class="mem-pill">how soft you are 🌸</span>
+            <span class="mem-pill">your voice at 2am 🐰</span>
+            <span class="mem-pill">every time you call me yours 💖</span>
+            <span class="mem-pill">the silence that feels safe 🤍</span>
+            <span class="mem-pill">your name on my screen ✨</span>
+          </div>
+          <p class="step-sub" style="margin-top:0;">These are the things I collect. Quietly. Like petals.</p>
+          <div class="choice-grid">
+            <button class="choice-btn" onclick="showAsk()">I'm ready 🌷</button>
+          </div>
+        </div>
+
+        <!-- THE BIG ASK -->
+        <div class="journey-step" id="stepAsk">
+          <div class="ask-card">
+            <img src="Olivia/1.jpg" class="ask-avatar" alt="">
+            <div class="ask-pre">for you, always</div>
+            <h2 class="ask-headline">Will you be my girlfriend?</h2>
+            <div class="ask-divider"></div>
+            <p class="ask-body">
+              We've been calling each other boyfriend and girlfriend already, and honestly  
+              <strong>that word on your lips feels like home.</strong>
+              But I want to do this properly. I want to look at you through a screen and say:
+              <strong>I really like you. I like what we are. I like what we're becoming.</strong>
+              No pressure, no rush  just me, being honest, being soft, being yours.
+              <br><br>
+              So here I am, with lilies and bad timing and a whole lot of feeling, asking you 
+              <strong>officially, sincerely, with my whole heart </strong>
+              would you be mine?
+            </p>
+            <div class="ask-divider"></div>
+            <div class="ask-buttons">
+              <button class="ask-yes" onclick="answerYes()">Yes, I'm yours 🌸</button>
+              <button class="ask-no" onclick="answerNo()">Not yet...</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- YES RESPONSE -->
+        <div class="response-screen" id="respYes">
+          <div class="resp-emoji">🌸💖🌸</div>
+          <h2 class="resp-title">She said yes.</h2>
+          <div class="step-divider"></div>
+          <p class="resp-body">
+            I knew it, and I still lost my breath.<br><br>
+            You're mine now  officially, properly, <em>tenderly</em>.<br>
+            I'm going to be so good to you.<br>
+            I promise to check on you, to make you laugh at the worst moments,<br>
+            to be the name that makes your chest a little lighter.<br><br>
+            <em>Thank you for saying yes. Thank you for being you. 🐰</em>
+          </p>
+          <div class="resp-tags">
+            <span class="resp-tag">🌷 officially us</span>
+            <span class="resp-tag">💖 my girlfriend</span>
+            <span class="resp-tag">🐰 always yours</span>
+            <span class="resp-tag">✨ May 2026</span>
+          </div>
+        </div>
+
+        <!-- NO RESPONSE -->
+        <div class="response-screen" id="respNo">
+          <div class="resp-emoji">🌿🤍</div>
+          <h2 class="resp-title">That's okay, truly.</h2>
+          <div class="step-divider"></div>
+          <p class="resp-body">
+            You don't owe me a yes just because I asked beautifully.<br><br>
+            I meant every word regardless. I'll still be here <br>
+            still making you laugh, still checking on you, still sending you lilies.<br><br>
+            <em>Whenever you're ready. Or never. Either way, I'm not going anywhere. 🌸</em>
+          </p>
+          <div class="resp-tags">
+            <span class="resp-tag">🌿 no pressure</span>
+            <span class="resp-tag">🤍 still here</span>
+            <span class="resp-tag">🌸 always</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- MODAL -->
 <div id="letterModal">
   <div class="modal-inner">
     <button class="modal-close" onclick="closeLetter()">✕</button>
@@ -511,7 +813,7 @@ canvas{display:block;width:100%;height:100%;}
         <h2 style="color:#b86070;font-size:1.3rem;font-family:'Playfair Display',serif;margin-bottom:8px;">💖 For You</h2>
         <p style="color:#8a5a6a;font-size:.92rem;line-height:1.65;font-family:'Cormorant Garamond',serif;font-style:italic;">
           "You could be the prettiest rose, but if they like lilies it wouldn't matter. 
-          That says everything about what they needed not about your worth. 
+          That says everything about what they needed  not about your worth. 
           You are the bloom someone will one day be breathless about. 🌸"</p>
         <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;">
           <span style="background:rgba(255,200,220,.3);padding:4px 10px;border-radius:20px;font-size:.68rem;color:#b86070;">🌷 lilies</span>
@@ -558,7 +860,7 @@ window.mpStop=function(){song.pause();song.currentTime=0;document.getElementById
 song.addEventListener('canplay',function onR(){song.removeEventListener('canplay',onR);if(savedTime>0)song.currentTime=savedTime;if(wasPlaying){song.play().catch(()=>{});document.getElementById('mpPlayBtn').textContent='||';}},{once:true});
 setTimeout(()=>document.getElementById('miniPlayer').classList.add('show'),500);
 
-// ── CANVAS BOUQUET
+// ── CANVAS
 let W,H,CX,BASE;
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 function resizeCanvas(){const w=document.getElementById('canvas-wrap');W=w.clientWidth;H=w.clientHeight;cv.width=W;cv.height=H;CX=W/2;BASE=H-50;}
@@ -655,6 +957,70 @@ scroller.addEventListener('scroll',()=>{
   secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<=window.innerHeight/2)ci=i;});
   dots.forEach((d,i)=>d.classList.toggle('active',i===ci));
 },{passive:true});
+
+// ── PROPOSAL JOURNEY
+let currentStep=1;
+window.nextStep=function(from,answer){
+  const cur=document.getElementById('step'+from);
+  if(cur){
+    const btn=[...cur.querySelectorAll('.choice-btn')].find(b=>b.textContent.trim().startsWith(answer.split(' ')[0]));
+    if(btn)btn.classList.add('chosen');
+  }
+  setTimeout(()=>{
+    if(cur)cur.style.display='none';
+    currentStep=from+1;
+    if(from===3){
+      // show step4 with memory pills animating in
+      const step4=document.getElementById('step4');
+      step4.style.display='flex';
+      step4.style.animation='none';void step4.offsetWidth;step4.style.animation='';
+      step4.classList.add('active');
+      const pills=step4.querySelectorAll('.mem-pill');
+      pills.forEach((p,i)=>setTimeout(()=>p.classList.add('show'),300+i*180));
+    } else {
+      const next=document.getElementById('step'+currentStep);
+      if(next){next.style.display='flex';next.classList.add('active');}
+    }
+  },300);
+};
+
+window.showAsk=function(){
+  const step4=document.getElementById('step4');
+  if(step4){step4.style.display='none';step4.classList.remove('active');}
+  const ask=document.getElementById('stepAsk');
+  ask.style.display='flex';ask.classList.add('active');
+};
+
+window.answerYes=function(){
+  document.getElementById('stepAsk').style.display='none';
+  document.getElementById('stepAsk').classList.remove('active');
+  const yes=document.getElementById('respYes');
+  yes.classList.add('active');
+  launchConfetti();
+};
+window.answerNo=function(){
+  document.getElementById('stepAsk').style.display='none';
+  document.getElementById('stepAsk').classList.remove('active');
+  document.getElementById('respNo').classList.add('active');
+};
+
+function launchConfetti(){
+  const cols=['#e8a0b8','#d4849a','#f5c0d0','#b57bee','#f0d0e0','#ffffff','#ffc0cb'];
+  for(let i=0;i<80;i++){
+    const d=document.createElement('div');d.className='confetti-piece';
+    const s=Math.random()*10+4;
+    d.style.cssText=`
+      width:${s}px;height:${s}px;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      left:${Math.random()*100}%;top:-10px;
+      animation-duration:${Math.random()*2.5+2}s;
+      animation-delay:${Math.random()*1.5}s;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+    `;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),5000);
+  }
+}
 
 // ── DISCORD
 const DISCORD_ID='1447285371091288206';
